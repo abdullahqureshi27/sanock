@@ -1,4 +1,4 @@
-import { useRef } from 'react';
+import { useRef, useState } from 'react';
 import { motion, useInView } from 'framer-motion';
 
 const values = [
@@ -71,6 +71,7 @@ const steps = [
 export default function About() {
   const sectionRef = useRef(null);
   const isInView = useInView(sectionRef, { once: true, margin: '-80px' });
+  const [isProcessHovered, setIsProcessHovered] = useState(false);
 
   const handleScroll = (e, href) => {
     e.preventDefault();
@@ -150,38 +151,75 @@ export default function About() {
         </div>
       </section>
 
-      <section id="process" className="py-12 sm:py-16 md:py-24 bg-[#f8f9fa] border-t border-gray-100">
+      <section
+        id="process"
+        onMouseEnter={() => setIsProcessHovered(true)}
+        onMouseLeave={() => setIsProcessHovered(false)}
+        className={`py-12 sm:py-16 md:py-24 border-t transition-all duration-700 ease-in-out cursor-default ${
+          isProcessHovered
+            ? 'bg-[#000000] border-neutral-900 text-white'
+            : 'bg-[#f8f9fa] border-gray-100 text-[#121212]'
+        }`}
+      >
         <div className="mx-auto max-w-[1320px] px-4 sm:px-6 md:px-10">
           
           <div className="grid lg:grid-cols-12 gap-8 sm:gap-12 lg:gap-16 items-start">
             
             <div className="lg:col-span-5 lg:sticky lg:top-28">
-              <span className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-[#121212] text-white text-xs font-bold uppercase tracking-wider mb-3 sm:mb-5">
+              <span
+                className={`inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full text-xs font-bold uppercase tracking-wider mb-3 sm:mb-5 transition-colors duration-500 ${
+                  isProcessHovered
+                    ? 'bg-neutral-800 text-white border border-neutral-700'
+                    : 'bg-[#121212] text-white'
+                }`}
+              >
                 <span className="w-1.5 h-1.5 rounded-full bg-[#ed1e3a]"></span>
                 WORKFLOW
               </span>
-              <h2 className="text-3xl sm:text-4xl lg:text-[56px] font-extrabold leading-[1.08] tracking-[-0.03em] text-[#121212] mb-3 sm:mb-5">
+
+              <h2
+                className={`text-3xl sm:text-4xl lg:text-[56px] font-extrabold leading-[1.08] tracking-[-0.03em] mb-3 sm:mb-5 transition-colors duration-500 ${
+                  isProcessHovered ? 'text-white' : 'text-[#121212]'
+                }`}
+              >
                 The Action Behind <span className="text-[#ed1e3a]">Process</span>
               </h2>
-              <p className="text-sm sm:text-base text-[#4f4f4f] leading-relaxed max-w-[380px]">
+
+              <p
+                className={`text-sm sm:text-base leading-relaxed max-w-[380px] transition-colors duration-500 ${
+                  isProcessHovered ? 'text-gray-300' : 'text-[#4f4f4f]'
+                }`}
+              >
                 A disciplined, iterative methodology engineered to bring clarity, velocity, and high impact to every client engagement.
               </p>
             </div>
 
             <div className="lg:col-span-7 space-y-3.5 sm:space-y-4">
-              {steps.map((step, idx) => (
+              {steps.map((step) => (
                 <div
                   key={step.num}
-                  className="bg-white p-5 sm:p-7 rounded-[20px] sm:rounded-[24px] border border-gray-200/70 shadow-xs flex items-start gap-4 sm:gap-6"
+                  className={`p-5 sm:p-7 rounded-[20px] sm:rounded-[24px] border shadow-xs flex items-start gap-4 sm:gap-6 transition-all duration-500 ${
+                    isProcessHovered
+                      ? 'bg-[#141414] border-neutral-800 text-white hover:bg-[#1a1a1a]'
+                      : 'bg-white border-gray-200/70 text-[#121212] hover:shadow-md'
+                  }`}
                 >
                   <span className="text-2xl sm:text-3xl font-black text-[#ed1e3a] tracking-tight shrink-0 font-mono">
                     {step.num}
                   </span>
                   <div>
-                    <h3 className="text-base sm:text-lg md:text-xl font-extrabold text-[#121212] tracking-tight mb-1.5">
+                    <h3
+                      className={`text-base sm:text-lg md:text-xl font-extrabold tracking-tight mb-1.5 transition-colors duration-500 ${
+                        isProcessHovered ? 'text-white' : 'text-[#121212]'
+                      }`}
+                    >
                       {step.title}
                     </h3>
-                    <p className="text-xs sm:text-sm text-[#4f4f4f] leading-relaxed">
+                    <p
+                      className={`text-xs sm:text-sm leading-relaxed transition-colors duration-500 ${
+                        isProcessHovered ? 'text-gray-300' : 'text-[#4f4f4f]'
+                      }`}
+                    >
                       {step.desc}
                     </p>
                   </div>
@@ -189,7 +227,7 @@ export default function About() {
               ))}
 
               <div className="rounded-[20px] sm:rounded-[24px] overflow-hidden shadow-md">
-                <div className="bg-[#121212] text-white p-5 sm:p-7 flex items-start gap-4 sm:gap-6">
+                <div className="bg-[#121212] text-white p-5 sm:p-7 flex items-start gap-4 sm:gap-6 border border-neutral-800">
                   <span className="text-2xl sm:text-3xl font-black text-[#ed1e3a] tracking-tight shrink-0 font-mono">
                     06
                   </span>
