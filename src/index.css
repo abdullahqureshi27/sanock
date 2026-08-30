@@ -19,6 +19,53 @@ body.menu-open {
   overflow: hidden;
 }
 
+/* Process Section Dark Hover Transition */
+#process {
+  background-color: #f8f9fa;
+  transition: background-color 0.6s ease, border-color 0.6s ease;
+}
+
+#process:hover {
+  background-color: #000000 !important;
+  border-color: #1a1a1a !important;
+}
+
+#process:hover .process-title {
+  color: #ffffff !important;
+}
+
+#process:hover .process-desc {
+  color: #d1d5db !important;
+}
+
+#process:hover .process-badge {
+  background-color: #1f1f1f !important;
+  color: #ffffff !important;
+  border-color: #333333 !important;
+}
+
+#process:hover .process-card {
+  background-color: #141414 !important;
+  border-color: #262626 !important;
+}
+
+#process:hover .process-card h3 {
+  color: #ffffff !important;
+}
+
+#process:hover .process-card p {
+  color: #9ca3af !important;
+}
+
+.process-card {
+  transition: all 0.5s ease;
+}
+
+.process-card:hover {
+  border-color: #ed1e3a !important;
+}
+
+/* Video Marquee Animations */
 @keyframes marquee-up {
   0% { transform: translateY(0%); }
   100% { transform: translateY(-50%); }
@@ -42,6 +89,7 @@ body.menu-open {
   animation-play-state: paused;
 }
 
+/* Client Logos Marquee */
 @keyframes infinite-scroll {
   0% { transform: translateX(0); }
   100% { transform: translateX(-100%); }

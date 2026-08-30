@@ -1,4 +1,4 @@
-import { useRef, useState } from 'react';
+import { useRef } from 'react';
 import { motion, useInView } from 'framer-motion';
 
 const values = [
@@ -71,7 +71,6 @@ const steps = [
 export default function About() {
   const sectionRef = useRef(null);
   const isInView = useInView(sectionRef, { once: true, margin: '-80px' });
-  const [isProcessHovered, setIsProcessHovered] = useState(false);
 
   const handleScroll = (e, href) => {
     e.preventDefault();
@@ -153,43 +152,23 @@ export default function About() {
 
       <section
         id="process"
-        onMouseEnter={() => setIsProcessHovered(true)}
-        onMouseLeave={() => setIsProcessHovered(false)}
-        className={`py-12 sm:py-16 md:py-24 border-t transition-all duration-700 ease-in-out cursor-default ${
-          isProcessHovered
-            ? 'bg-[#000000] border-neutral-900 text-white'
-            : 'bg-[#f8f9fa] border-gray-100 text-[#121212]'
-        }`}
+        className="py-12 sm:py-16 md:py-24 border-t border-gray-100 transition-colors duration-700"
       >
         <div className="mx-auto max-w-[1320px] px-4 sm:px-6 md:px-10">
           
           <div className="grid lg:grid-cols-12 gap-8 sm:gap-12 lg:gap-16 items-start">
             
             <div className="lg:col-span-5 lg:sticky lg:top-28">
-              <span
-                className={`inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full text-xs font-bold uppercase tracking-wider mb-3 sm:mb-5 transition-colors duration-500 ${
-                  isProcessHovered
-                    ? 'bg-neutral-800 text-white border border-neutral-700'
-                    : 'bg-[#121212] text-white'
-                }`}
-              >
+              <span className="process-badge inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-[#121212] text-white text-xs font-bold uppercase tracking-wider mb-3 sm:mb-5 border border-transparent transition-all duration-500">
                 <span className="w-1.5 h-1.5 rounded-full bg-[#ed1e3a]"></span>
                 WORKFLOW
               </span>
 
-              <h2
-                className={`text-3xl sm:text-4xl lg:text-[56px] font-extrabold leading-[1.08] tracking-[-0.03em] mb-3 sm:mb-5 transition-colors duration-500 ${
-                  isProcessHovered ? 'text-white' : 'text-[#121212]'
-                }`}
-              >
+              <h2 className="process-title text-3xl sm:text-4xl lg:text-[56px] font-extrabold leading-[1.08] tracking-[-0.03em] text-[#121212] mb-3 sm:mb-5 transition-colors duration-500">
                 The Action Behind <span className="text-[#ed1e3a]">Process</span>
               </h2>
 
-              <p
-                className={`text-sm sm:text-base leading-relaxed max-w-[380px] transition-colors duration-500 ${
-                  isProcessHovered ? 'text-gray-300' : 'text-[#4f4f4f]'
-                }`}
-              >
+              <p className="process-desc text-sm sm:text-base text-[#4f4f4f] leading-relaxed max-w-[380px] transition-colors duration-500">
                 A disciplined, iterative methodology engineered to bring clarity, velocity, and high impact to every client engagement.
               </p>
             </div>
@@ -198,28 +177,16 @@ export default function About() {
               {steps.map((step) => (
                 <div
                   key={step.num}
-                  className={`p-5 sm:p-7 rounded-[20px] sm:rounded-[24px] border shadow-xs flex items-start gap-4 sm:gap-6 transition-all duration-500 ${
-                    isProcessHovered
-                      ? 'bg-[#141414] border-neutral-800 text-white hover:bg-[#1a1a1a]'
-                      : 'bg-white border-gray-200/70 text-[#121212] hover:shadow-md'
-                  }`}
+                  className="process-card bg-white p-5 sm:p-7 rounded-[20px] sm:rounded-[24px] border border-gray-200/70 shadow-xs flex items-start gap-4 sm:gap-6 cursor-pointer"
                 >
                   <span className="text-2xl sm:text-3xl font-black text-[#ed1e3a] tracking-tight shrink-0 font-mono">
                     {step.num}
                   </span>
                   <div>
-                    <h3
-                      className={`text-base sm:text-lg md:text-xl font-extrabold tracking-tight mb-1.5 transition-colors duration-500 ${
-                        isProcessHovered ? 'text-white' : 'text-[#121212]'
-                      }`}
-                    >
+                    <h3 className="text-base sm:text-lg md:text-xl font-extrabold text-[#121212] tracking-tight mb-1.5 transition-colors duration-500">
                       {step.title}
                     </h3>
-                    <p
-                      className={`text-xs sm:text-sm leading-relaxed transition-colors duration-500 ${
-                        isProcessHovered ? 'text-gray-300' : 'text-[#4f4f4f]'
-                      }`}
-                    >
+                    <p className="text-xs sm:text-sm text-[#4f4f4f] leading-relaxed transition-colors duration-500">
                       {step.desc}
                     </p>
                   </div>
