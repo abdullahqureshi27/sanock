@@ -1,18 +1,11 @@
-// ===================================
-// Footer.jsx - Website Footer & Floating WhatsApp Button
-// Contains brand description, navigation links, socials, and live WhatsApp chat link
-// ===================================
-
 import { FaWhatsapp } from 'react-icons/fa';
 
-// -- Navigation Links --
 const navigationLinks = [
   { label: 'Services', href: '#services' },
   { label: 'Work', href: '#work' },
   { label: 'FAQS', href: '#faqs' },
 ];
 
-// -- Social Media Links --
 const socialLinks = [
   { label: 'Instagram', href: 'https://instagram.com' },
   { label: 'LinkedIn', href: 'https://linkedin.com' },
@@ -20,7 +13,6 @@ const socialLinks = [
 ];
 
 export default function Footer() {
-  // Smooth scroll helper for internal anchor links
   const scrollToSection = (e, href) => {
     if (href.startsWith('#')) {
       e.preventDefault();
@@ -31,10 +23,8 @@ export default function Footer() {
 
   return (
     <>
-      {/* ===== MAIN FOOTER ===== */}
       <footer className="bg-[#0d0d0d] text-white pt-12 sm:pt-16 md:pt-20 pb-8 sm:pb-12 relative overflow-hidden w-full m-0 p-0 border-0">
         
-        {/* Background glow element */}
         <img
           src="/assets/images/footerimage.webp"
           alt="footer glow"
@@ -44,7 +34,6 @@ export default function Footer() {
         <div className="mx-auto max-w-[1320px] px-4 sm:px-6 md:px-10 relative z-10">
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-12 gap-8 sm:gap-10 lg:gap-8 items-start">
             
-            {/* Column 1: Brand Info */}
             <div className="sm:col-span-2 lg:col-span-8">
               <a
                 href="#home"
@@ -63,7 +52,6 @@ export default function Footer() {
               </p>
             </div>
 
-            {/* Column 2: Navigation Links */}
             <div className="lg:col-span-2">
               <h4 className="text-xs sm:text-sm md:text-[15px] text-white/50 mb-3 sm:mb-5 font-normal">
                 /Navigation
@@ -83,7 +71,6 @@ export default function Footer() {
               </ul>
             </div>
 
-            {/* Column 3: Social Links */}
             <div className="lg:col-span-2">
               <h4 className="text-xs sm:text-sm md:text-[15px] text-white/50 mb-3 sm:mb-5 font-normal">
                 /Socials
@@ -106,13 +93,11 @@ export default function Footer() {
 
           </div>
 
-          {/* Copyright text */}
           <div className="pt-10 sm:pt-16 text-xs sm:text-sm text-[#a1a1a1]">
             <p>©{new Date().getFullYear()} Manxel Studio</p>
           </div>
         </div>
 
-        {/* Large watermark text at the bottom */}
         <div className="absolute bottom-0 left-0 right-0 w-full overflow-hidden pointer-events-none z-0 flex items-end justify-center select-none pb-2">
           <span className="text-[clamp(40px,15vw,220px)] font-black tracking-[-0.04em] leading-none text-white/[0.035] select-none uppercase whitespace-nowrap">
             MANXEL
@@ -120,7 +105,6 @@ export default function Footer() {
         </div>
       </footer>
 
-      {/* ===== FLOATING WHATSAPP BUTTON ===== */}
       <div className="fixed bottom-4 right-4 sm:bottom-6 sm:right-6 z-50">
         <a
           href="https://wa.me/923001234567"

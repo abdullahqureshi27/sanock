@@ -1,16 +1,9 @@
-/* ===================================
-   Manxel - Global Styles
-   Simple and clean CSS for the project
-   =================================== */
-
 @import "tailwindcss";
 
-/* -- Font Setup -- */
 @theme {
   --font-sans: "Outfit", sans-serif;
 }
 
-/* -- Base Styles -- */
 html {
   scroll-behavior: smooth;
 }
@@ -22,15 +15,10 @@ body {
   color: #121212;
 }
 
-/* Lock body scroll when mobile menu is open */
 body.menu-open {
   overflow: hidden;
 }
 
-/* ===================================
-   Process Section - Hover Effect
-   Background turns black on hover
-   =================================== */
 #process {
   background-color: #f8f9fa;
   transition: background-color 0.6s ease, border-color 0.6s ease;
@@ -76,18 +64,11 @@ body.menu-open {
   border-color: #ed1e3a !important;
 }
 
-/* ===================================
-   Marquee Animations
-   Used in Hero (videos) and FAQ (logos)
-   =================================== */
-
-/* Vertical scroll - going up */
 @keyframes marquee-up {
   0% { transform: translateY(0%); }
   100% { transform: translateY(-50%); }
 }
 
-/* Vertical scroll - going down */
 @keyframes marquee-down {
   0% { transform: translateY(-50%); }
   100% { transform: translateY(0%); }
@@ -101,13 +82,11 @@ body.menu-open {
   animation: marquee-down 28s linear infinite;
 }
 
-/* Pause animation on hover */
 .animate-marquee-up:hover,
 .animate-marquee-down:hover {
   animation-play-state: paused;
 }
 
-/* Horizontal scroll - for client logos */
 @keyframes infinite-scroll {
   0% { transform: translateX(0); }
   100% { transform: translateX(-100%); }

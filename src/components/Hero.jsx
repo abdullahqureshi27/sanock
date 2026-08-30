@@ -1,12 +1,6 @@
-// ===================================
-// Hero.jsx - Hero / Landing Section
-// Shows heading, stats, and video marquee
-// ===================================
-
 import { motion } from 'framer-motion';
 import { HiArrowRight } from 'react-icons/hi2';
 
-// -- Company Stats Data --
 const stats = [
   { value: '19', suffix: '+', label: 'Years Experience' },
   { value: '800', suffix: '+', label: 'Clients Served' },
@@ -14,7 +8,6 @@ const stats = [
   { value: '400', suffix: '+', label: 'Projects Delivered' },
 ];
 
-// -- Video Paths for Marquee Columns --
 const videosColumn1 = [
   '/assets/videos/video-01.mp4',
   '/assets/videos/video-02.mp4',
@@ -30,7 +23,6 @@ const videosColumn2 = [
 ];
 
 export default function Hero() {
-  // Smooth scroll to a section
   const scrollToSection = (e, sectionId) => {
     e.preventDefault();
     const element = document.querySelector(sectionId);
@@ -43,10 +35,8 @@ export default function Hero() {
         
         <div className="grid lg:grid-cols-12 gap-8 lg:gap-8 items-center">
           
-          {/* -- Left Side: Text Content -- */}
           <div className="lg:col-span-5 flex flex-col justify-center">
             
-            {/* Badge */}
             <motion.div
               initial={{ opacity: 0, y: 15 }}
               animate={{ opacity: 1, y: 0 }}
@@ -59,7 +49,6 @@ export default function Hero() {
               </div>
             </motion.div>
 
-            {/* Main Heading */}
             <motion.h1
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
@@ -69,7 +58,6 @@ export default function Hero() {
               Shaping Bold Brands For The <span className="text-[#666666]">Digital Age.</span>
             </motion.h1>
 
-            {/* Description */}
             <motion.p
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
@@ -79,7 +67,6 @@ export default function Hero() {
               We Design impactful logos and digital identities for modern brands.
             </motion.p>
 
-            {/* CTA Buttons */}
             <motion.div
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
@@ -109,7 +96,6 @@ export default function Hero() {
               </a>
             </motion.div>
 
-            {/* Stats Grid */}
             <motion.div
               initial={{ opacity: 0, y: 25 }}
               animate={{ opacity: 1, y: 0 }}
@@ -133,17 +119,14 @@ export default function Hero() {
 
           </div>
 
-          {/* -- Right Side: Video Marquee -- */}
           <div className="lg:col-span-7 relative mt-6 lg:mt-0">
             <div className="relative h-[420px] sm:h-[500px] md:h-[580px] lg:h-[640px] overflow-hidden">
               
-              {/* Top & bottom fade gradients */}
               <div className="absolute top-0 left-0 right-0 h-16 sm:h-24 bg-gradient-to-b from-white via-white/80 to-transparent z-10 pointer-events-none" />
               <div className="absolute bottom-0 left-0 right-0 h-16 sm:h-24 bg-gradient-to-t from-white via-white/80 to-transparent z-10 pointer-events-none" />
 
               <div className="grid grid-cols-2 gap-3 sm:gap-5 h-full max-w-[580px] ml-auto">
                 
-                {/* Column 1 - scrolls up */}
                 <div className="overflow-hidden relative h-full">
                   <div className="flex flex-col gap-3 sm:gap-5 animate-marquee-up">
                     {[...videosColumn1, ...videosColumn1].map((src, i) => (
@@ -164,7 +147,6 @@ export default function Hero() {
                   </div>
                 </div>
 
-                {/* Column 2 - scrolls down */}
                 <div className="overflow-hidden relative h-full pt-6 sm:pt-10">
                   <div className="flex flex-col gap-3 sm:gap-5 animate-marquee-down">
                     {[...videosColumn2, ...videosColumn2].map((src, i) => (

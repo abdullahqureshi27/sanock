@@ -1,12 +1,6 @@
-// ===================================
-// FAQ.jsx - Frequently Asked Questions & Client Logos
-// Includes continuous scrolling brand marquee and accordion FAQ
-// ===================================
-
 import { useState, useRef } from 'react';
 import { motion, AnimatePresence, useInView } from 'framer-motion';
 
-// -- Client Logos for Marquee Banner --
 const clientLogos = [
   { name: 'GMS', src: '/assets/images/slides-logo1.svg', h: 'h-7 sm:h-9 md:h-10' },
   { name: 'GSK', src: '/assets/images/slides-logo2.svg', h: 'h-6 sm:h-7 md:h-8' },
@@ -16,7 +10,6 @@ const clientLogos = [
   { name: 'ADCP', src: '/assets/images/slides-logo6.svg', h: 'h-8 sm:h-10 md:h-12' },
 ];
 
-// -- Questions & Answers Data --
 const faqItems = [
   {
     question: 'What is our approach to logo design?',
@@ -45,20 +38,16 @@ const faqItems = [
 ];
 
 export default function FAQ() {
-  // Track currently expanded FAQ item (defaults to first item open)
   const [activeFaqIndex, setActiveFaqIndex] = useState(0);
   const sectionRef = useRef(null);
   const isVisible = useInView(sectionRef, { once: true, margin: '-80px' });
 
-  // Toggle FAQ accordion item open/close
   const toggleFaq = (index) => {
     setActiveFaqIndex(activeFaqIndex === index ? -1 : index);
   };
 
   return (
     <section id="faqs" className="bg-white overflow-hidden" ref={sectionRef}>
-      
-      {/* ===== CLIENT LOGOS INFINITE SCROLL BANNER ===== */}
       <div className="pt-10 sm:pt-16 md:pt-20 pb-8 sm:pb-14 overflow-hidden w-full relative flex select-none border-b border-gray-100">
         {[1, 2, 3].map((trackIndex) => (
           <div
@@ -80,11 +69,8 @@ export default function FAQ() {
         ))}
       </div>
 
-      {/* ===== MAIN FAQS CONTENT ===== */}
       <div className="mx-auto max-w-[1320px] px-4 sm:px-6 md:px-10 py-14 sm:py-20 md:py-24">
         <div className="grid lg:grid-cols-12 gap-8 sm:gap-12 items-start">
-          
-          {/* Left Sticky Header */}
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             animate={isVisible ? { opacity: 1, y: 0 } : {}}
@@ -104,7 +90,6 @@ export default function FAQ() {
             </p>
           </motion.div>
 
-          {/* Right Accordion List */}
           <div className="lg:col-span-7 space-y-3 sm:space-y-4">
             {faqItems.map((faq, index) => {
               const isOpen = activeFaqIndex === index;
@@ -121,7 +106,6 @@ export default function FAQ() {
                       : 'bg-[#f8f9fa] hover:bg-[#f0f2f5]'
                   }`}
                 >
-                  {/* Question row with Plus/Minus indicator */}
                   <div className="flex items-center justify-between gap-3 sm:gap-4">
                     <h3 className="text-base sm:text-lg md:text-[19px] font-bold text-[#121212] tracking-tight leading-snug">
                       {faq.question}
@@ -135,7 +119,6 @@ export default function FAQ() {
                     </div>
                   </div>
 
-                  {/* Expandable Answer */}
                   <AnimatePresence>
                     {isOpen && (
                       <motion.div

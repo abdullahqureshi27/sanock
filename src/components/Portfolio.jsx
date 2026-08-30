@@ -1,12 +1,6 @@
-// ===================================
-// Portfolio.jsx - Featured Work Section
-// Shows project cards with hover effects
-// ===================================
-
 import { useRef } from 'react';
 import { motion, useInView } from 'framer-motion';
 
-// -- Projects Data --
 const projects = [
   { title: 'EGR', category: 'Logo Design', image: '/assets/images/featured-work-06.webp' },
   { title: 'Babylon Vision Properties', category: 'Logo Design', image: '/assets/images/featured-work-01.webp' },
@@ -26,7 +20,6 @@ export default function Portfolio() {
     <section id="work" className="py-12 sm:py-16 md:py-24 bg-white" ref={sectionRef}>
       <div className="mx-auto max-w-[1320px] px-4 sm:px-6 md:px-10">
         
-        {/* -- Section Header -- */}
         <div className="flex flex-col md:flex-row md:items-end md:justify-between gap-4 sm:gap-6 mb-8 sm:mb-14">
           <motion.div
             initial={{ opacity: 0, y: 20 }}
@@ -52,7 +45,6 @@ export default function Portfolio() {
           </motion.p>
         </div>
 
-        {/* -- Projects Grid -- */}
         <div className="grid grid-cols-1 md:grid-cols-2 gap-5 sm:gap-6">
           {projects.map((project, index) => (
             <motion.div
@@ -62,7 +54,6 @@ export default function Portfolio() {
               transition={{ duration: 0.5, delay: 0.08 + index * 0.05 }}
               className="relative rounded-[22px] sm:rounded-[30px] overflow-hidden bg-[#f0f2f5] group shadow-xs hover:shadow-xl transition-all duration-500 cursor-pointer"
             >
-              {/* Project Image - blurs on hover */}
               <div className="aspect-[16/11] sm:aspect-[16/10] overflow-hidden">
                 <img
                   src={project.image}
@@ -72,7 +63,6 @@ export default function Portfolio() {
                 />
               </div>
 
-              {/* Info Card - slides up on hover */}
               <div className="absolute inset-x-3.5 sm:inset-x-6 bottom-3.5 sm:bottom-6 p-4 sm:p-5 rounded-[18px] sm:rounded-[22px] bg-white shadow-xl flex items-center justify-between gap-4 transition-all duration-400 ease-out translate-y-0 opacity-100 md:translate-y-8 md:opacity-0 md:group-hover:translate-y-0 md:group-hover:opacity-100">
                 <div className="min-w-0">
                   <h3 className="text-base sm:text-lg md:text-xl font-bold text-[#121212] tracking-tight leading-snug truncate">
@@ -83,7 +73,6 @@ export default function Portfolio() {
                   </span>
                 </div>
 
-                {/* Link Icon */}
                 <div className="shrink-0">
                   <img
                     src="/assets/images/featured-icon.svg"

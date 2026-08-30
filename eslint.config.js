@@ -6,7 +6,6 @@ import { defineConfig, globalIgnores } from 'eslint/config'
 
 export default defineConfig([
   globalIgnores(['dist', 'node_modules']),
-  // Frontend React Configuration
   {
     files: ['src/**/*.{js,jsx}'],
     extends: [
@@ -19,7 +18,6 @@ export default defineConfig([
       parserOptions: { ecmaFeatures: { jsx: true } },
     },
   },
-  // Backend Node.js Configuration
   {
     files: ['server/**/*.js'],
     extends: [js.configs.recommended],

@@ -1,14 +1,8 @@
-// ===================================
-// Contact.jsx - Contact & Inquiry Section
-// Features inquiry form with budget selection and direct API submission
-// ===================================
-
 import { useRef, useState } from 'react';
 import { motion, useInView } from 'framer-motion';
 import { HiArrowRight } from 'react-icons/hi2';
 import axios from 'axios';
 
-// -- Budget Selection Options --
 const budgetList = [
   'Less $5K',
   '$5K - $10K',
@@ -21,7 +15,6 @@ export default function Contact() {
   const sectionRef = useRef(null);
   const isVisible = useInView(sectionRef, { once: true, margin: '-80px' });
 
-  // -- Form State --
   const [formData, setFormData] = useState({
     name: '',
     email: '',
@@ -31,10 +24,9 @@ export default function Contact() {
   });
 
   const [formErrors, setFormErrors] = useState({});
-  const [submitStatus, setSubmitStatus] = useState('idle'); // 'idle' | 'loading' | 'success' | 'error'
+  const [submitStatus, setSubmitStatus] = useState('idle');
   const [errorMessage, setErrorMessage] = useState('');
 
-  // -- Simple Form Validation --
   const validateForm = () => {
     const errors = {};
     if (!formData.name.trim()) errors.name = 'Full name is required';
@@ -49,11 +41,9 @@ export default function Contact() {
     return Object.keys(errors).length === 0;
   };
 
-  // -- Input Change Handler --
   const handleInputChange = (e) => {
     const { name, value } = e.target;
     setFormData((prev) => ({ ...prev, [name]: value }));
-    // Clear error message on typing
     if (formErrors[name]) {
       setFormErrors((prev) => {
         const updated = { ...prev };
@@ -63,7 +53,6 @@ export default function Contact() {
     }
   };
 
-  // -- Form Submit to Backend API --
   const handleSubmit = async (e) => {
     e.preventDefault();
     if (!validateForm()) return;
@@ -81,7 +70,6 @@ export default function Contact() {
       });
 
       setSubmitStatus('success');
-      // Reset form after successful submission
       setFormData({
         name: '',
         email: '',
@@ -103,7 +91,6 @@ export default function Contact() {
         
         <div className="grid lg:grid-cols-12 gap-8 sm:gap-12 lg:gap-16 items-start">
           
-          {/* -- Left Column: Contact Information Cards -- */}
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             animate={isVisible ? { opacity: 1, y: 0 } : {}}
@@ -122,7 +109,6 @@ export default function Contact() {
             </p>
 
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-3.5 sm:gap-4">
-              {/* Sales Email Card */}
               <div className="bg-[#f0f2f5] p-4 sm:p-5 rounded-[20px] flex flex-col justify-between border border-gray-100 min-h-[120px] sm:min-h-[130px]">
                 <div className="flex items-center justify-between mb-2">
                   <div className="w-7 h-7 sm:w-8 sm:h-8 rounded-full bg-white flex items-center justify-center text-[#121212] shadow-xs">
@@ -148,7 +134,6 @@ export default function Contact() {
                 </div>
               </div>
 
-              {/* Direct Phone Call Card */}
               <div className="bg-[#f0f2f5] p-4 sm:p-5 rounded-[20px] flex flex-col justify-between border border-gray-100 min-h-[120px] sm:min-h-[130px]">
                 <div className="flex items-center justify-between mb-2">
                   <div className="w-7 h-7 sm:w-8 sm:h-8 rounded-full bg-white flex items-center justify-center text-[#121212] shadow-xs">
@@ -176,7 +161,6 @@ export default function Contact() {
             </div>
           </motion.div>
 
-          {/* -- Right Column: Dark Inquiry Form -- */}
           <motion.div
             initial={{ opacity: 0, y: 30 }}
             animate={isVisible ? { opacity: 1, y: 0 } : {}}
@@ -189,7 +173,6 @@ export default function Contact() {
 
             <form onSubmit={handleSubmit} className="space-y-4 sm:space-y-5">
               
-              {/* Full Name Input */}
               <div>
                 <input
                   type="text"
@@ -203,7 +186,6 @@ export default function Contact() {
                 {formErrors.name && <p className="text-xs text-[#ed1e3a] mt-1">{formErrors.name}</p>}
               </div>
 
-              {/* Email & Phone Inputs */}
               <div className="grid sm:grid-cols-2 gap-3 sm:gap-4">
                 <div>
                   <input
@@ -231,7 +213,6 @@ export default function Contact() {
                 </div>
               </div>
 
-              {/* Budget Option Pills */}
               <div>
                 <label className="block text-[11px] sm:text-xs font-bold uppercase tracking-wider text-neutral-400 mb-2 sm:mb-3">
                   Estimated Budget *
@@ -257,7 +238,6 @@ export default function Contact() {
                 </div>
               </div>
 
-              {/* Project Message Textarea */}
               <div>
                 <textarea
                   name="message"
@@ -271,7 +251,6 @@ export default function Contact() {
                 {formErrors.message && <p className="text-xs text-[#ed1e3a] mt-1">{formErrors.message}</p>}
               </div>
 
-              {/* Submit Button */}
               <div className="pt-1 sm:pt-2">
                 <button
                   type="submit"
@@ -291,7 +270,6 @@ export default function Contact() {
                 </button>
               </div>
 
-              {/* Feedback Status Messages */}
               {submitStatus === 'success' && (
                 <div className="p-3.5 sm:p-4 rounded-xl bg-green-500/10 border border-green-500/20 text-green-400 text-xs sm:text-sm font-medium">
                   ✓ Response submitted successfully! Our team will contact you within 24 hours.

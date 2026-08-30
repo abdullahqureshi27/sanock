@@ -13,7 +13,6 @@ const sendContactEmail = async (formData) => {
     console.log(`- Phone: ${phone}`);
     console.log(`- Subject: ${subject}`);
     console.log(`- Message: ${message}`);
-    console.log(`[Note] To deliver real Gmail inbox messages, set EMAIL_USER & EMAIL_PASS in .env`);
     return false;
   }
 

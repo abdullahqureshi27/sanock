@@ -1,12 +1,6 @@
-// ===================================
-// Services.jsx - What We Do Section
-// Shows 3 service cards with icons and images
-// ===================================
-
 import { useRef } from 'react';
 import { motion, useInView } from 'framer-motion';
 
-// -- Services Data --
 const services = [
   {
     icon: '/assets/images/what-we-do-icon1.svg',
@@ -39,7 +33,6 @@ export default function Services() {
     <section id="services" className="py-12 sm:py-16 md:py-24 bg-white" ref={sectionRef}>
       <div className="mx-auto max-w-[1320px] px-4 sm:px-6 md:px-10">
         
-        {/* -- Section Header -- */}
         <div className="flex flex-col md:flex-row md:items-end md:justify-between gap-4 sm:gap-6 mb-8 sm:mb-14">
           <motion.div
             initial={{ opacity: 0, y: 20 }}
@@ -65,7 +58,6 @@ export default function Services() {
           </motion.p>
         </div>
 
-        {/* -- Service Cards Grid -- */}
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5 sm:gap-6">
           {services.map((service, index) => (
             <motion.div
@@ -75,7 +67,6 @@ export default function Services() {
               transition={{ duration: 0.5, delay: 0.1 + index * 0.1 }}
               className="bg-[#f0f2f5] p-2.5 sm:p-3 rounded-[24px] sm:rounded-[32px] flex flex-col justify-between hover:shadow-lg transition-all duration-300 group"
             >
-              {/* Card Content */}
               <div className="bg-white rounded-[20px] sm:rounded-[26px] p-5 sm:p-6 sm:min-h-[290px] flex flex-col justify-between">
                 <div>
                   <img
@@ -91,7 +82,6 @@ export default function Services() {
                   </p>
                 </div>
 
-                {/* Tags */}
                 <div className="flex flex-wrap gap-1.5 sm:gap-2 pt-2 border-t border-gray-100">
                   {service.tags.map((tag) => (
                     <span
@@ -105,7 +95,6 @@ export default function Services() {
                 </div>
               </div>
 
-              {/* Card Image */}
               <div className="rounded-[20px] sm:rounded-[26px] overflow-hidden mt-2.5 sm:mt-3 aspect-[16/11] sm:aspect-[4/3] bg-neutral-100">
                 <img
                   src={service.image}

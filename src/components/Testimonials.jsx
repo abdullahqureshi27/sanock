@@ -1,13 +1,7 @@
-// ===================================
-// Testimonials.jsx - Client Video Reviews Section
-// Shows video cards from clients with autoplay and company names
-// ===================================
-
 import { useRef } from 'react';
 import { motion, useInView } from 'framer-motion';
 import { HiCheckBadge } from 'react-icons/hi2';
 
-// -- Testimonial Video Cards Data --
 const clientReviews = [
   {
     video: '/assets/videos/video-01.mp4',
@@ -43,7 +37,6 @@ export default function Testimonials() {
     <section id="testimonials" className="py-12 sm:py-16 md:py-24 bg-white" ref={sectionRef}>
       <div className="mx-auto max-w-[1320px] px-4 sm:px-6 md:px-10">
         
-        {/* -- Section Header -- */}
         <div className="flex flex-col md:flex-row md:items-end md:justify-between gap-4 sm:gap-6 mb-8 sm:mb-14">
           <motion.div
             initial={{ opacity: 0, y: 20 }}
@@ -69,7 +62,6 @@ export default function Testimonials() {
           </motion.p>
         </div>
 
-        {/* -- Video Cards Grid -- */}
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-6">
           {clientReviews.map((review, index) => (
             <motion.div
@@ -79,7 +71,6 @@ export default function Testimonials() {
               transition={{ duration: 0.5, delay: 0.1 + index * 0.08 }}
               className="bg-[#f0f2f5] p-3.5 sm:p-5 rounded-[22px] sm:rounded-[28px] flex flex-col justify-between hover:shadow-lg transition-all duration-300 group"
             >
-              {/* Reviewer Header: Avatar, Name, Verified Badge & Play Icon */}
               <div className="flex items-center justify-between gap-3 mb-3.5 sm:mb-5">
                 <div className="flex items-center gap-2.5">
                   <div className="w-9 h-9 sm:w-10 sm:h-10 rounded-full bg-[#121212] text-white flex items-center justify-center font-black text-xs shadow-xs">
@@ -101,7 +92,6 @@ export default function Testimonials() {
                 </div>
               </div>
 
-              {/* Video Player */}
               <div className="relative rounded-[16px] sm:rounded-[20px] overflow-hidden aspect-[4/3] bg-black shadow-inner">
                 <video
                   src={review.video}

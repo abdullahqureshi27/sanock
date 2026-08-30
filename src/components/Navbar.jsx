@@ -1,14 +1,8 @@
-// ===================================
-// Navbar.jsx - Header Navigation & Popup Modal
-// Includes desktop navigation bar, mobile sliding drawer, and "Talk With Agents" inquiry modal
-// ===================================
-
 import { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { HiArrowRight, HiXMark, HiBars3 } from 'react-icons/hi2';
 import axios from 'axios';
 
-// -- Navigation Items --
 const navLinks = [
   { label: 'Services', href: '#services' },
   { label: 'Work', href: '#work' },
@@ -18,7 +12,6 @@ const navLinks = [
   { label: 'Contact', href: '#contact' },
 ];
 
-// -- Mobile Drawer Links --
 const mobileDrawerLinks = [
   { label: 'Home', href: '#home' },
   { label: 'About Us', href: '#values' },
@@ -36,7 +29,6 @@ const mobileDrawerLinks = [
   { label: 'Contact Us', href: '#contact' },
 ];
 
-// -- Service & Budget Options for Modal Form --
 const serviceOptions = [
   'Website Design & Development',
   'Visual Identity & Logo',
@@ -54,14 +46,12 @@ const budgetOptions = [
 ];
 
 export default function Navbar() {
-  // -- UI States --
   const [isScrolled, setIsScrolled] = useState(false);
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [isServicesSubmenuOpen, setIsServicesSubmenuOpen] = useState(false);
   const [activeSection, setActiveSection] = useState('home');
 
-  // -- Modal Form State --
   const [modalFormData, setModalFormData] = useState({
     name: '',
     email: '',
@@ -70,10 +60,9 @@ export default function Navbar() {
     budget: '$10K - $25K',
     message: '',
   });
-  const [modalStatus, setModalStatus] = useState('idle'); // 'idle' | 'loading' | 'success' | 'error'
+  const [modalStatus, setModalStatus] = useState('idle');
   const [modalErrorMessage, setModalErrorMessage] = useState('');
 
-  // -- Scroll Spy Listener for Navbar Background & Active Underline --
   useEffect(() => {
     const handleScroll = () => {
       setIsScrolled(window.scrollY > 20);
@@ -98,7 +87,6 @@ export default function Navbar() {
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
 
-  // -- Lock body scroll when mobile menu or modal is open --
   useEffect(() => {
     if (isMenuOpen || isModalOpen) {
       document.body.classList.add('menu-open');
@@ -108,7 +96,6 @@ export default function Navbar() {
     return () => document.body.classList.remove('menu-open');
   }, [isMenuOpen, isModalOpen]);
 
-  // -- Smooth Scroll Handler --
   const handleNavClick = (e, href) => {
     e.preventDefault();
     const targetId = href.replace('#', '');
@@ -122,7 +109,6 @@ export default function Navbar() {
     }
   };
 
-  // -- Modal Form Submission --
   const handleModalSubmit = async (e) => {
     e.preventDefault();
     if (!modalFormData.name.trim() || !modalFormData.email.trim() || !modalFormData.phone.trim()) {
@@ -165,7 +151,6 @@ export default function Navbar() {
 
   return (
     <>
-      {/* ===== DESKTOP & MOBILE HEADER ===== */}
       <header
         className={`fixed top-0 left-0 right-0 z-40 transition-all duration-300 ${
           isScrolled
@@ -175,7 +160,6 @@ export default function Navbar() {
       >
         <div className="mx-auto max-w-[1320px] px-3.5 sm:px-6 md:px-10 flex items-center justify-between h-[64px] sm:h-[76px]">
           
-          {/* Logo */}
           <a
             href="#home"
             onClick={(e) => handleNavClick(e, '#home')}
@@ -189,7 +173,6 @@ export default function Navbar() {
             </span>
           </a>
 
-          {/* Desktop Navigation Links */}
           <div className="hidden lg:flex items-center gap-7 xl:gap-8">
             {navLinks.map((link) => (
               <a
@@ -214,9 +197,7 @@ export default function Navbar() {
             ))}
           </div>
 
-          {/* Header Action Buttons */}
           <div className="flex items-center gap-2 sm:gap-3">
-            {/* Talk With Agents Button */}
             <button
               onClick={() => setIsModalOpen(true)}
               className="inline-flex items-center gap-1.5 sm:gap-2 px-3 sm:px-5 py-2 sm:py-2.5 text-[11px] sm:text-sm font-bold text-[#121212] bg-[#fdf2f4] border border-[#fecdd3] rounded-full hover:bg-[#fee2e2] transition-all duration-300 shadow-xs group cursor-pointer"
@@ -227,7 +208,6 @@ export default function Navbar() {
               </span>
             </button>
 
-            {/* Direct Call Icon */}
             <a
               href="tel:+923001234567"
               className="w-8 h-8 sm:w-10 sm:h-10 rounded-full bg-[#BE1623] hover:bg-[#a5131e] text-white flex items-center justify-center shadow-xs transition-transform duration-300 hover:scale-105 shrink-0"
@@ -238,7 +218,6 @@ export default function Navbar() {
               </svg>
             </a>
 
-            {/* Mobile Hamburger Button */}
             <button
               onClick={() => setIsMenuOpen(true)}
               className="lg:hidden p-2 text-[#121212] bg-[#f0f2f5] hover:bg-[#e4e7ec] rounded-full transition-colors cursor-pointer"
@@ -251,12 +230,10 @@ export default function Navbar() {
         </div>
       </header>
 
-      {/* ===== MOBILE SLIDING DRAWER MENU ===== */}
       <AnimatePresence>
         {isMenuOpen && (
           <div className="fixed inset-0 z-50 lg:hidden flex justify-end">
             
-            {/* Backdrop overlay */}
             <motion.div
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
@@ -266,7 +243,6 @@ export default function Navbar() {
               className="fixed inset-0 bg-black/50 backdrop-blur-xs"
             />
 
-            {/* Sliding drawer panel */}
             <motion.div
               initial={{ x: '100%' }}
               animate={{ x: 0 }}
@@ -275,7 +251,6 @@ export default function Navbar() {
               className="relative z-10 w-full max-w-[340px] sm:max-w-[350px] h-full bg-white text-[#000000] shadow-2xl flex flex-col justify-between overflow-y-auto"
             >
               <div>
-                {/* Header in Drawer */}
                 <div className="flex items-center justify-between p-[15px] border-b border-[rgba(190,22,36,0.25)]">
                   <a
                     href="#home"
@@ -300,7 +275,6 @@ export default function Navbar() {
                   </button>
                 </div>
 
-                {/* Navigation Links in Drawer */}
                 <div className="p-[15px]">
                   <ul className="m-0 p-0 list-none mb-4">
                     {mobileDrawerLinks.map((item) => (
@@ -362,7 +336,6 @@ export default function Navbar() {
                     ))}
                   </ul>
 
-                  {/* Get a Quote Button in Drawer */}
                   <div className="pt-2">
                     <button
                       onClick={() => {
@@ -385,7 +358,6 @@ export default function Navbar() {
                 </div>
               </div>
 
-              {/* Drawer Footer */}
               <div className="p-[15px] border-t border-[rgba(190,22,36,0.15)] text-[12px] text-gray-500 flex items-center justify-between">
                 <span>© {new Date().getFullYear()} Manxel Studio</span>
                 <a href="tel:+923001234567" className="text-[#BE1623] font-bold">
@@ -398,12 +370,10 @@ export default function Navbar() {
         )}
       </AnimatePresence>
 
-      {/* ===== "TALK WITH AGENTS" INQUIRY MODAL POPUP ===== */}
       <AnimatePresence>
         {isModalOpen && (
           <div className="fixed inset-0 z-50 flex items-center justify-center p-4 sm:p-6">
             
-            {/* Modal Backdrop */}
             <motion.div
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
@@ -412,7 +382,6 @@ export default function Navbar() {
               className="fixed inset-0 bg-black/70 backdrop-blur-xs"
             />
 
-            {/* Modal Box */}
             <motion.div
               initial={{ opacity: 0, scale: 0.95, y: 20 }}
               animate={{ opacity: 1, scale: 1, y: 0 }}
@@ -420,7 +389,6 @@ export default function Navbar() {
               transition={{ duration: 0.3 }}
               className="relative z-10 w-full max-w-[760px] max-h-[92vh] bg-white rounded-[24px] sm:rounded-[32px] p-6 sm:p-10 shadow-2xl overflow-y-auto"
             >
-              {/* Close Button */}
               <button
                 onClick={() => setIsModalOpen(false)}
                 className="absolute top-5 right-5 w-9 h-9 rounded-full bg-[#f0f2f5] hover:bg-[#e2e5e9] text-[#121212] flex items-center justify-center transition-colors cursor-pointer"
@@ -429,7 +397,6 @@ export default function Navbar() {
                 <HiXMark className="w-5 h-5" />
               </button>
 
-              {/* Modal Header */}
               <div className="mb-6 sm:mb-8 pr-8">
                 <span className="text-xs font-bold text-[#BE1623] uppercase tracking-wider block mb-1.5">
                   Let’s Get Started
@@ -439,10 +406,8 @@ export default function Navbar() {
                 </h3>
               </div>
 
-              {/* Modal Form */}
               <form onSubmit={handleModalSubmit} className="space-y-4 sm:space-y-5">
                 
-                {/* Name, Email, Phone 3-column Grid */}
                 <div className="grid sm:grid-cols-3 gap-3">
                   <div>
                     <input
@@ -476,7 +441,6 @@ export default function Navbar() {
                   </div>
                 </div>
 
-                {/* Service Selection */}
                 <div>
                   <label className="block text-[11px] sm:text-xs font-bold uppercase tracking-wider text-[#4f4f4f] mb-2">
                     Select Service *
@@ -499,7 +463,6 @@ export default function Navbar() {
                   </div>
                 </div>
 
-                {/* Budget Selection */}
                 <div>
                   <label className="block text-[11px] sm:text-xs font-bold uppercase tracking-wider text-[#4f4f4f] mb-2">
                     Estimated Budget *
@@ -522,7 +485,6 @@ export default function Navbar() {
                   </div>
                 </div>
 
-                {/* Message Box */}
                 <div>
                   <textarea
                     rows="3"
@@ -533,7 +495,6 @@ export default function Navbar() {
                   />
                 </div>
 
-                {/* Error & Success Messages */}
                 {modalErrorMessage && (
                   <p className="text-xs text-[#BE1623] font-medium">{modalErrorMessage}</p>
                 )}
@@ -541,7 +502,6 @@ export default function Navbar() {
                   <p className="text-xs text-green-600 font-bold">✓ Thank you! We received your inquiry.</p>
                 )}
 
-                {/* Submit Button */}
                 <button
                   type="submit"
                   disabled={modalStatus === 'loading'}
