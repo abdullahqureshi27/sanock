@@ -11,11 +11,11 @@ export default function Footer() {
 
   return (
     <>
-      <footer className="bg-[#0d0d0d] text-white pt-12 sm:pt-16 md:pt-20 pb-8 sm:pb-12 relative overflow-hidden w-full max-w-full">
+      <footer className="bg-[#0d0d0d] text-white pt-12 sm:pt-16 md:pt-20 pb-8 sm:pb-12 relative overflow-hidden w-full m-0 p-0 border-0">
         <img
           src="/assets/images/footerimage.webp"
           alt="footer glow"
-          className="absolute bottom-0 right-0 pointer-events-none w-[813px] max-w-full h-[232px] object-cover object-right-bottom z-0"
+          className="absolute bottom-0 right-0 pointer-events-none w-[700px] max-w-full h-[220px] object-cover object-right-bottom z-0 opacity-80"
         />
 
         <div className="mx-auto max-w-[1320px] px-4 sm:px-6 md:px-10 relative z-10">
@@ -91,9 +91,9 @@ export default function Footer() {
           </div>
         </div>
 
-        <div className="absolute bottom-0 left-0 right-0 w-full max-w-full overflow-hidden pointer-events-none z-0 flex items-end justify-center select-none pb-2">
+        <div className="absolute bottom-0 left-0 right-0 w-full overflow-hidden pointer-events-none z-0 flex items-end justify-center select-none pb-2">
           <span
-            className="text-[clamp(50px,18vw,250px)] font-black tracking-[-0.04em] leading-none text-white/[0.035] select-none uppercase whitespace-nowrap"
+            className="text-[clamp(40px,15vw,220px)] font-black tracking-[-0.04em] leading-none text-white/[0.035] select-none uppercase whitespace-nowrap"
           >
             MANXEL
           </span>
