@@ -30,8 +30,9 @@ const contactSchema = new mongoose.Schema(
     },
   },
   {
-    timestamps: true,
+    timestamps: { createdAt: 'created_at', updatedAt: 'updated_at' },
+    collection: 'contact_messages',
   }
 );
 
-module.exports = mongoose.model('Contact', contactSchema);
+module.exports = mongoose.model('Contact', contactSchema, 'contact_messages');
