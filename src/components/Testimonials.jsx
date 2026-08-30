@@ -99,6 +99,7 @@ export default function Testimonials() {
                   loop
                   muted
                   playsInline
+                  preload="metadata"
                   className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700"
                 />
               </div>

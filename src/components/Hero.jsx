@@ -140,6 +140,7 @@ export default function Hero() {
                           loop
                           muted
                           playsInline
+                          preload="metadata"
                           className="w-full h-full object-cover"
                         />
                       </div>
@@ -160,6 +161,7 @@ export default function Hero() {
                           loop
                           muted
                           playsInline
+                          preload="metadata"
                           className="w-full h-full object-cover"
                         />
                       </div>

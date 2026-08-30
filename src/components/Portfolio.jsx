@@ -59,6 +59,7 @@ export default function Portfolio() {
                   src={project.image}
                   alt={project.title}
                   loading="lazy"
+                  decoding="async"
                   className="w-full h-full object-cover transition-all duration-500 ease-out md:group-hover:scale-105 md:group-hover:blur-[3px]"
                 />
               </div>
