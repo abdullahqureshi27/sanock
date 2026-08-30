@@ -1,6 +1,12 @@
+// ===================================
+// Hero.jsx - Hero / Landing Section
+// Shows heading, stats, and video marquee
+// ===================================
+
 import { motion } from 'framer-motion';
 import { HiArrowRight } from 'react-icons/hi2';
 
+// -- Company Stats Data --
 const stats = [
   { value: '19', suffix: '+', label: 'Years Experience' },
   { value: '800', suffix: '+', label: 'Clients Served' },
@@ -8,14 +14,15 @@ const stats = [
   { value: '400', suffix: '+', label: 'Projects Delivered' },
 ];
 
-const videosCol1 = [
+// -- Video Paths for Marquee Columns --
+const videosColumn1 = [
   '/assets/videos/video-01.mp4',
   '/assets/videos/video-02.mp4',
   '/assets/videos/video-03.mp4',
   '/assets/videos/video-04.mp4',
 ];
 
-const videosCol2 = [
+const videosColumn2 = [
   '/assets/videos/video-03.mp4',
   '/assets/videos/video-04.mp4',
   '/assets/videos/video-01.mp4',
@@ -23,10 +30,11 @@ const videosCol2 = [
 ];
 
 export default function Hero() {
-  const handleScroll = (e, href) => {
+  // Smooth scroll to a section
+  const scrollToSection = (e, sectionId) => {
     e.preventDefault();
-    const target = document.querySelector(href);
-    if (target) target.scrollIntoView({ behavior: 'smooth' });
+    const element = document.querySelector(sectionId);
+    if (element) element.scrollIntoView({ behavior: 'smooth' });
   };
 
   return (
@@ -35,8 +43,10 @@ export default function Hero() {
         
         <div className="grid lg:grid-cols-12 gap-8 lg:gap-8 items-center">
           
+          {/* -- Left Side: Text Content -- */}
           <div className="lg:col-span-5 flex flex-col justify-center">
             
+            {/* Badge */}
             <motion.div
               initial={{ opacity: 0, y: 15 }}
               animate={{ opacity: 1, y: 0 }}
@@ -49,6 +59,7 @@ export default function Hero() {
               </div>
             </motion.div>
 
+            {/* Main Heading */}
             <motion.h1
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
@@ -58,6 +69,7 @@ export default function Hero() {
               Shaping Bold Brands For The <span className="text-[#666666]">Digital Age.</span>
             </motion.h1>
 
+            {/* Description */}
             <motion.p
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
@@ -67,6 +79,7 @@ export default function Hero() {
               We Design impactful logos and digital identities for modern brands.
             </motion.p>
 
+            {/* CTA Buttons */}
             <motion.div
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
@@ -75,7 +88,7 @@ export default function Hero() {
             >
               <a
                 href="#services"
-                onClick={(e) => handleScroll(e, '#services')}
+                onClick={(e) => scrollToSection(e, '#services')}
                 className="inline-flex items-center gap-2.5 px-6 sm:px-7 py-3 sm:py-3.5 text-xs sm:text-sm font-bold text-white bg-[#ed1e3a] hover:bg-[#d3122c] rounded-full shadow-md hover:shadow-lg transition-all duration-300 group"
               >
                 <span>Our Services</span>
@@ -86,7 +99,7 @@ export default function Hero() {
 
               <a
                 href="#contact"
-                onClick={(e) => handleScroll(e, '#contact')}
+                onClick={(e) => scrollToSection(e, '#contact')}
                 className="inline-flex items-center gap-2.5 px-6 sm:px-7 py-3 sm:py-3.5 text-xs sm:text-sm font-bold text-[#121212] bg-[#f0f2f5] hover:bg-[#e4e7ec] border border-gray-200 rounded-full transition-all duration-300 group"
               >
                 <span>Book Free Call</span>
@@ -96,15 +109,16 @@ export default function Hero() {
               </a>
             </motion.div>
 
+            {/* Stats Grid */}
             <motion.div
               initial={{ opacity: 0, y: 25 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.6, delay: 0.4 }}
               className="grid grid-cols-2 sm:grid-cols-4 gap-2.5 sm:gap-3"
             >
-              {stats.map((item, idx) => (
+              {stats.map((item, index) => (
                 <div
-                  key={idx}
+                  key={index}
                   className="bg-[#f0f2f5] p-3 sm:p-4 rounded-[16px] sm:rounded-[20px] text-center border border-gray-100 flex flex-col justify-center min-h-[86px] sm:min-h-[96px]"
                 >
                   <div className="text-xl sm:text-2xl font-extrabold text-[#121212] tracking-tight leading-none mb-1">
@@ -119,19 +133,22 @@ export default function Hero() {
 
           </div>
 
+          {/* -- Right Side: Video Marquee -- */}
           <div className="lg:col-span-7 relative mt-6 lg:mt-0">
             <div className="relative h-[420px] sm:h-[500px] md:h-[580px] lg:h-[640px] overflow-hidden">
               
+              {/* Top & bottom fade gradients */}
               <div className="absolute top-0 left-0 right-0 h-16 sm:h-24 bg-gradient-to-b from-white via-white/80 to-transparent z-10 pointer-events-none" />
               <div className="absolute bottom-0 left-0 right-0 h-16 sm:h-24 bg-gradient-to-t from-white via-white/80 to-transparent z-10 pointer-events-none" />
 
               <div className="grid grid-cols-2 gap-3 sm:gap-5 h-full max-w-[580px] ml-auto">
                 
+                {/* Column 1 - scrolls up */}
                 <div className="overflow-hidden relative h-full">
                   <div className="flex flex-col gap-3 sm:gap-5 animate-marquee-up">
-                    {[...videosCol1, ...videosCol1].map((src, i) => (
+                    {[...videosColumn1, ...videosColumn1].map((src, i) => (
                       <div
-                        key={`v1-${i}`}
+                        key={`col1-${i}`}
                         className="rounded-[20px] sm:rounded-[28px] overflow-hidden aspect-[9/15] bg-black shadow-lg shrink-0 border border-gray-100"
                       >
                         <video
@@ -147,11 +164,12 @@ export default function Hero() {
                   </div>
                 </div>
 
+                {/* Column 2 - scrolls down */}
                 <div className="overflow-hidden relative h-full pt-6 sm:pt-10">
                   <div className="flex flex-col gap-3 sm:gap-5 animate-marquee-down">
-                    {[...videosCol2, ...videosCol2].map((src, i) => (
+                    {[...videosColumn2, ...videosColumn2].map((src, i) => (
                       <div
-                        key={`v2-${i}`}
+                        key={`col2-${i}`}
                         className="rounded-[20px] sm:rounded-[28px] overflow-hidden aspect-[9/15] bg-black shadow-lg shrink-0 border border-gray-100"
                       >
                         <video

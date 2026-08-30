@@ -1,9 +1,25 @@
+// ===================================
+// Navbar.jsx - Header Navigation & Popup Modal
+// Includes desktop navigation bar, mobile sliding drawer, and "Talk With Agents" inquiry modal
+// ===================================
+
 import { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { HiArrowRight, HiXMark, HiBars3 } from 'react-icons/hi2';
 import axios from 'axios';
 
-const navItems = [
+// -- Navigation Items --
+const navLinks = [
+  { label: 'Services', href: '#services' },
+  { label: 'Work', href: '#work' },
+  { label: 'Values', href: '#values' },
+  { label: 'Process', href: '#process' },
+  { label: 'FAQs', href: '#faqs' },
+  { label: 'Contact', href: '#contact' },
+];
+
+// -- Mobile Drawer Links --
+const mobileDrawerLinks = [
   { label: 'Home', href: '#home' },
   { label: 'About Us', href: '#values' },
   {
@@ -20,6 +36,7 @@ const navItems = [
   { label: 'Contact Us', href: '#contact' },
 ];
 
+// -- Service & Budget Options for Modal Form --
 const serviceOptions = [
   'Website Design & Development',
   'Visual Identity & Logo',
@@ -37,13 +54,15 @@ const budgetOptions = [
 ];
 
 export default function Navbar() {
-  const [scrolled, setScrolled] = useState(false);
-  const [menuOpen, setMenuOpen] = useState(false);
-  const [modalOpen, setModalOpen] = useState(false);
-  const [servicesOpen, setServicesOpen] = useState(false);
+  // -- UI States --
+  const [isScrolled, setIsScrolled] = useState(false);
+  const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [isServicesSubmenuOpen, setIsServicesSubmenuOpen] = useState(false);
   const [activeSection, setActiveSection] = useState('home');
 
-  const [modalForm, setModalForm] = useState({
+  // -- Modal Form State --
+  const [modalFormData, setModalFormData] = useState({
     name: '',
     email: '',
     phone: '',
@@ -51,22 +70,23 @@ export default function Navbar() {
     budget: '$10K - $25K',
     message: '',
   });
-  const [modalStatus, setModalStatus] = useState('idle');
-  const [modalError, setModalError] = useState('');
+  const [modalStatus, setModalStatus] = useState('idle'); // 'idle' | 'loading' | 'success' | 'error'
+  const [modalErrorMessage, setModalErrorMessage] = useState('');
 
+  // -- Scroll Spy Listener for Navbar Background & Active Underline --
   useEffect(() => {
     const handleScroll = () => {
-      setScrolled(window.scrollY > 20);
+      setIsScrolled(window.scrollY > 20);
 
-      const sectionIds = ['home', 'services', 'work', 'values', 'process', 'faqs', 'contact'];
-      const headerOffset = 260;
+      const sectionList = ['home', 'services', 'work', 'values', 'process', 'faqs', 'contact'];
+      const topOffset = 260;
 
-      for (let i = sectionIds.length - 1; i >= 0; i--) {
-        const el = document.getElementById(sectionIds[i]);
+      for (let i = sectionList.length - 1; i >= 0; i--) {
+        const el = document.getElementById(sectionList[i]);
         if (el) {
           const rect = el.getBoundingClientRect();
-          if (rect.top <= headerOffset) {
-            setActiveSection(sectionIds[i]);
+          if (rect.top <= topOffset) {
+            setActiveSection(sectionList[i]);
             break;
           }
         }
@@ -78,46 +98,52 @@ export default function Navbar() {
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
 
+  // -- Lock body scroll when mobile menu or modal is open --
   useEffect(() => {
-    if (menuOpen || modalOpen) {
+    if (isMenuOpen || isModalOpen) {
       document.body.classList.add('menu-open');
     } else {
       document.body.classList.remove('menu-open');
     }
     return () => document.body.classList.remove('menu-open');
-  }, [menuOpen, modalOpen]);
+  }, [isMenuOpen, isModalOpen]);
 
+  // -- Smooth Scroll Handler --
   const handleNavClick = (e, href) => {
     e.preventDefault();
-    const sectionId = href.replace('#', '');
-    setActiveSection(sectionId);
-    setMenuOpen(false);
-    setModalOpen(false);
-    const target = document.querySelector(href);
-    if (target) {
-      target.scrollIntoView({ behavior: 'smooth' });
+    const targetId = href.replace('#', '');
+    setActiveSection(targetId);
+    setIsMenuOpen(false);
+    setIsModalOpen(false);
+
+    const targetElement = document.querySelector(href);
+    if (targetElement) {
+      targetElement.scrollIntoView({ behavior: 'smooth' });
     }
   };
 
+  // -- Modal Form Submission --
   const handleModalSubmit = async (e) => {
     e.preventDefault();
-    if (!modalForm.name.trim() || !modalForm.email.trim() || !modalForm.phone.trim()) {
-      setModalError('Please fill in all required fields.');
+    if (!modalFormData.name.trim() || !modalFormData.email.trim() || !modalFormData.phone.trim()) {
+      setModalErrorMessage('Please fill in all required fields.');
       return;
     }
+
     setModalStatus('loading');
-    setModalError('');
+    setModalErrorMessage('');
 
     try {
       await axios.post('/api/contact', {
-        name: modalForm.name,
-        email: modalForm.email,
-        phone: modalForm.phone,
-        subject: `Modal Inquiry: ${modalForm.service} (${modalForm.budget})`,
-        message: modalForm.message || 'Submitted via Talk With Agents popup modal.',
+        name: modalFormData.name,
+        email: modalFormData.email,
+        phone: modalFormData.phone,
+        subject: `Modal Inquiry: ${modalFormData.service} (${modalFormData.budget})`,
+        message: modalFormData.message || 'Submitted via Talk With Agents popup modal.',
       });
+
       setModalStatus('success');
-      setModalForm({
+      setModalFormData({
         name: '',
         email: '',
         phone: '',
@@ -125,27 +151,31 @@ export default function Navbar() {
         budget: '$10K - $25K',
         message: '',
       });
+
       setTimeout(() => {
         setModalStatus('idle');
-        setModalOpen(false);
+        setIsModalOpen(false);
       }, 3000);
     } catch (err) {
       setModalStatus('error');
-      setModalError(err.response?.data?.message || 'Something went wrong. Please try again.');
+      setModalErrorMessage(err.response?.data?.message || 'Something went wrong. Please try again.');
       setTimeout(() => setModalStatus('idle'), 4000);
     }
   };
 
   return (
     <>
+      {/* ===== DESKTOP & MOBILE HEADER ===== */}
       <header
         className={`fixed top-0 left-0 right-0 z-40 transition-all duration-300 ${
-          scrolled
+          isScrolled
             ? 'bg-white/95 backdrop-blur-md border-b border-gray-100 shadow-xs'
             : 'bg-white/90 md:bg-transparent'
         }`}
       >
         <div className="mx-auto max-w-[1320px] px-3.5 sm:px-6 md:px-10 flex items-center justify-between h-[64px] sm:h-[76px]">
+          
+          {/* Logo */}
           <a
             href="#home"
             onClick={(e) => handleNavClick(e, '#home')}
@@ -159,15 +189,9 @@ export default function Navbar() {
             </span>
           </a>
 
+          {/* Desktop Navigation Links */}
           <div className="hidden lg:flex items-center gap-7 xl:gap-8">
-            {[
-              { label: 'Services', href: '#services' },
-              { label: 'Work', href: '#work' },
-              { label: 'Values', href: '#values' },
-              { label: 'Process', href: '#process' },
-              { label: 'FAQs', href: '#faqs' },
-              { label: 'Contact', href: '#contact' },
-            ].map((link) => (
+            {navLinks.map((link) => (
               <a
                 key={link.href}
                 href={link.href}
@@ -190,9 +214,11 @@ export default function Navbar() {
             ))}
           </div>
 
+          {/* Header Action Buttons */}
           <div className="flex items-center gap-2 sm:gap-3">
+            {/* Talk With Agents Button */}
             <button
-              onClick={() => setModalOpen(true)}
+              onClick={() => setIsModalOpen(true)}
               className="inline-flex items-center gap-1.5 sm:gap-2 px-3 sm:px-5 py-2 sm:py-2.5 text-[11px] sm:text-sm font-bold text-[#121212] bg-[#fdf2f4] border border-[#fecdd3] rounded-full hover:bg-[#fee2e2] transition-all duration-300 shadow-xs group cursor-pointer"
             >
               <span>Talk With Agents</span>
@@ -201,6 +227,7 @@ export default function Navbar() {
               </span>
             </button>
 
+            {/* Direct Call Icon */}
             <a
               href="tel:+923001234567"
               className="w-8 h-8 sm:w-10 sm:h-10 rounded-full bg-[#BE1623] hover:bg-[#a5131e] text-white flex items-center justify-center shadow-xs transition-transform duration-300 hover:scale-105 shrink-0"
@@ -211,37 +238,44 @@ export default function Navbar() {
               </svg>
             </a>
 
+            {/* Mobile Hamburger Button */}
             <button
-              onClick={() => setMenuOpen(true)}
+              onClick={() => setIsMenuOpen(true)}
               className="lg:hidden p-2 text-[#121212] bg-[#f0f2f5] hover:bg-[#e4e7ec] rounded-full transition-colors cursor-pointer"
               aria-label="Open menu"
             >
               <HiBars3 className="w-5 h-5" />
             </button>
           </div>
+
         </div>
       </header>
 
+      {/* ===== MOBILE SLIDING DRAWER MENU ===== */}
       <AnimatePresence>
-        {menuOpen && (
+        {isMenuOpen && (
           <div className="fixed inset-0 z-50 lg:hidden flex justify-end">
+            
+            {/* Backdrop overlay */}
             <motion.div
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
               exit={{ opacity: 0 }}
               transition={{ duration: 0.25 }}
-              onClick={() => setMenuOpen(false)}
+              onClick={() => setIsMenuOpen(false)}
               className="fixed inset-0 bg-black/50 backdrop-blur-xs"
             />
 
+            {/* Sliding drawer panel */}
             <motion.div
               initial={{ x: '100%' }}
               animate={{ x: 0 }}
               exit={{ x: '100%' }}
               transition={{ type: 'spring', damping: 28, stiffness: 260 }}
-              className="relative z-10 w-full max-w-[340px] sm:max-w-[350px] h-full bg-white text-[#000000] shadow-[0px_10px_50px_0px_rgba(0,0,0,0.15)] flex flex-col justify-between overflow-y-auto"
+              className="relative z-10 w-full max-w-[340px] sm:max-w-[350px] h-full bg-white text-[#000000] shadow-2xl flex flex-col justify-between overflow-y-auto"
             >
               <div>
+                {/* Header in Drawer */}
                 <div className="flex items-center justify-between p-[15px] border-b border-[rgba(190,22,36,0.25)]">
                   <a
                     href="#home"
@@ -255,7 +289,7 @@ export default function Navbar() {
                   </a>
 
                   <button
-                    onClick={() => setMenuOpen(false)}
+                    onClick={() => setIsMenuOpen(false)}
                     className="p-1 text-[#BE1623] hover:opacity-80 transition-opacity cursor-pointer"
                     aria-label="Close menu"
                   >
@@ -266,14 +300,15 @@ export default function Navbar() {
                   </button>
                 </div>
 
+                {/* Navigation Links in Drawer */}
                 <div className="p-[15px]">
                   <ul className="m-0 p-0 list-none mb-4">
-                    {navItems.map((item) => (
+                    {mobileDrawerLinks.map((item) => (
                       <li key={item.label} className="border-b border-[rgba(190,22,36,0.25)]">
                         {item.subItems ? (
                           <div>
                             <button
-                              onClick={() => setServicesOpen(!servicesOpen)}
+                              onClick={() => setIsServicesSubmenuOpen(!isServicesSubmenuOpen)}
                               className="w-full flex items-center justify-between py-[10px] text-[1.05rem] font-semibold text-[#000000] hover:text-[#BE1623] transition-colors cursor-pointer text-left"
                             >
                               <span>{item.label}</span>
@@ -282,7 +317,7 @@ export default function Navbar() {
                                 height="14"
                                 viewBox="0 0 16 16"
                                 className={`transition-transform duration-300 ${
-                                  servicesOpen ? 'rotate-180' : ''
+                                  isServicesSubmenuOpen ? 'rotate-180' : ''
                                 }`}
                               >
                                 <path
@@ -292,7 +327,7 @@ export default function Navbar() {
                               </svg>
                             </button>
                             <AnimatePresence>
-                              {servicesOpen && (
+                              {isServicesSubmenuOpen && (
                                 <motion.div
                                   initial={{ height: 0, opacity: 0 }}
                                   animate={{ height: 'auto', opacity: 1 }}
@@ -327,11 +362,12 @@ export default function Navbar() {
                     ))}
                   </ul>
 
+                  {/* Get a Quote Button in Drawer */}
                   <div className="pt-2">
                     <button
                       onClick={() => {
-                        setMenuOpen(false);
-                        setModalOpen(true);
+                        setIsMenuOpen(false);
+                        setIsModalOpen(true);
                       }}
                       className="inline-flex items-center gap-[5px] hover:gap-[10px] transition-all duration-300 cursor-pointer group"
                     >
@@ -349,6 +385,7 @@ export default function Navbar() {
                 </div>
               </div>
 
+              {/* Drawer Footer */}
               <div className="p-[15px] border-t border-[rgba(190,22,36,0.15)] text-[12px] text-gray-500 flex items-center justify-between">
                 <span>© {new Date().getFullYear()} Manxel Studio</span>
                 <a href="tel:+923001234567" className="text-[#BE1623] font-bold">
@@ -356,21 +393,26 @@ export default function Navbar() {
                 </a>
               </div>
             </motion.div>
+
           </div>
         )}
       </AnimatePresence>
 
+      {/* ===== "TALK WITH AGENTS" INQUIRY MODAL POPUP ===== */}
       <AnimatePresence>
-        {modalOpen && (
+        {isModalOpen && (
           <div className="fixed inset-0 z-50 flex items-center justify-center p-4 sm:p-6">
+            
+            {/* Modal Backdrop */}
             <motion.div
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
               exit={{ opacity: 0 }}
-              onClick={() => setModalOpen(false)}
+              onClick={() => setIsModalOpen(false)}
               className="fixed inset-0 bg-black/70 backdrop-blur-xs"
             />
 
+            {/* Modal Box */}
             <motion.div
               initial={{ opacity: 0, scale: 0.95, y: 20 }}
               animate={{ opacity: 1, scale: 1, y: 0 }}
@@ -378,14 +420,16 @@ export default function Navbar() {
               transition={{ duration: 0.3 }}
               className="relative z-10 w-full max-w-[760px] max-h-[92vh] bg-white rounded-[24px] sm:rounded-[32px] p-6 sm:p-10 shadow-2xl overflow-y-auto"
             >
+              {/* Close Button */}
               <button
-                onClick={() => setModalOpen(false)}
+                onClick={() => setIsModalOpen(false)}
                 className="absolute top-5 right-5 w-9 h-9 rounded-full bg-[#f0f2f5] hover:bg-[#e2e5e9] text-[#121212] flex items-center justify-center transition-colors cursor-pointer"
                 aria-label="Close modal"
               >
                 <HiXMark className="w-5 h-5" />
               </button>
 
+              {/* Modal Header */}
               <div className="mb-6 sm:mb-8 pr-8">
                 <span className="text-xs font-bold text-[#BE1623] uppercase tracking-wider block mb-1.5">
                   Let’s Get Started
@@ -395,14 +439,17 @@ export default function Navbar() {
                 </h3>
               </div>
 
+              {/* Modal Form */}
               <form onSubmit={handleModalSubmit} className="space-y-4 sm:space-y-5">
+                
+                {/* Name, Email, Phone 3-column Grid */}
                 <div className="grid sm:grid-cols-3 gap-3">
                   <div>
                     <input
                       type="text"
                       placeholder="Full name *"
-                      value={modalForm.name}
-                      onChange={(e) => setModalForm({ ...modalForm, name: e.target.value })}
+                      value={modalFormData.name}
+                      onChange={(e) => setModalFormData({ ...modalFormData, name: e.target.value })}
                       required
                       className="w-full bg-[#f8f9fa] border border-gray-200 rounded-xl px-4 py-3 text-xs sm:text-sm text-[#121212] placeholder:text-gray-400 focus:outline-none focus:border-[#BE1623]"
                     />
@@ -411,8 +458,8 @@ export default function Navbar() {
                     <input
                       type="email"
                       placeholder="Your email *"
-                      value={modalForm.email}
-                      onChange={(e) => setModalForm({ ...modalForm, email: e.target.value })}
+                      value={modalFormData.email}
+                      onChange={(e) => setModalFormData({ ...modalFormData, email: e.target.value })}
                       required
                       className="w-full bg-[#f8f9fa] border border-gray-200 rounded-xl px-4 py-3 text-xs sm:text-sm text-[#121212] placeholder:text-gray-400 focus:outline-none focus:border-[#BE1623]"
                     />
@@ -421,75 +468,80 @@ export default function Navbar() {
                     <input
                       type="tel"
                       placeholder="Phone number *"
-                      value={modalForm.phone}
-                      onChange={(e) => setModalForm({ ...modalForm, phone: e.target.value })}
+                      value={modalFormData.phone}
+                      onChange={(e) => setModalFormData({ ...modalFormData, phone: e.target.value })}
                       required
                       className="w-full bg-[#f8f9fa] border border-gray-200 rounded-xl px-4 py-3 text-xs sm:text-sm text-[#121212] placeholder:text-gray-400 focus:outline-none focus:border-[#BE1623]"
                     />
                   </div>
                 </div>
 
+                {/* Service Selection */}
                 <div>
                   <label className="block text-[11px] sm:text-xs font-bold uppercase tracking-wider text-[#4f4f4f] mb-2">
                     Select Service *
                   </label>
                   <div className="flex flex-wrap gap-2">
-                    {serviceOptions.map((srv) => (
+                    {serviceOptions.map((service) => (
                       <button
                         type="button"
-                        key={srv}
-                        onClick={() => setModalForm({ ...modalForm, service: srv })}
+                        key={service}
+                        onClick={() => setModalFormData({ ...modalFormData, service: service })}
                         className={`px-3 py-1.5 rounded-lg text-xs font-semibold transition-all cursor-pointer ${
-                          modalForm.service === srv
+                          modalFormData.service === service
                             ? 'bg-[#BE1623] text-white shadow-xs'
                             : 'bg-[#f0f2f5] text-[#4f4f4f] hover:bg-[#e4e7ec]'
                         }`}
                       >
-                        {srv}
+                        {service}
                       </button>
                     ))}
                   </div>
                 </div>
 
+                {/* Budget Selection */}
                 <div>
                   <label className="block text-[11px] sm:text-xs font-bold uppercase tracking-wider text-[#4f4f4f] mb-2">
                     Estimated Budget *
                   </label>
                   <div className="flex flex-wrap gap-2">
-                    {budgetOptions.map((b) => (
+                    {budgetOptions.map((budget) => (
                       <button
                         type="button"
-                        key={b}
-                        onClick={() => setModalForm({ ...modalForm, budget: b })}
+                        key={budget}
+                        onClick={() => setModalFormData({ ...modalFormData, budget: budget })}
                         className={`px-3 py-1.5 rounded-lg text-xs font-semibold transition-all cursor-pointer ${
-                          modalForm.budget === b
+                          modalFormData.budget === budget
                             ? 'bg-[#BE1623] text-white shadow-xs'
                             : 'bg-[#f0f2f5] text-[#4f4f4f] hover:bg-[#e4e7ec]'
                         }`}
                       >
-                        {b}
+                        {budget}
                       </button>
                     ))}
                   </div>
                 </div>
 
+                {/* Message Box */}
                 <div>
                   <textarea
                     rows="3"
                     placeholder="Tell us about Project..."
-                    value={modalForm.message}
-                    onChange={(e) => setModalForm({ ...modalForm, message: e.target.value })}
+                    value={modalFormData.message}
+                    onChange={(e) => setModalFormData({ ...modalFormData, message: e.target.value })}
                     className="w-full bg-[#f8f9fa] border border-gray-200 rounded-xl px-4 py-3 text-xs sm:text-sm text-[#121212] placeholder:text-gray-400 focus:outline-none focus:border-[#BE1623] resize-none"
                   />
                 </div>
 
-                {modalError && (
-                  <p className="text-xs text-[#BE1623] font-medium">{modalError}</p>
+                {/* Error & Success Messages */}
+                {modalErrorMessage && (
+                  <p className="text-xs text-[#BE1623] font-medium">{modalErrorMessage}</p>
                 )}
                 {modalStatus === 'success' && (
                   <p className="text-xs text-green-600 font-bold">✓ Thank you! We received your inquiry.</p>
                 )}
 
+                {/* Submit Button */}
                 <button
                   type="submit"
                   disabled={modalStatus === 'loading'}
@@ -500,6 +552,7 @@ export default function Navbar() {
                 </button>
               </form>
             </motion.div>
+
           </div>
         )}
       </AnimatePresence>

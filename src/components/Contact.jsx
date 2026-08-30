@@ -1,9 +1,15 @@
+// ===================================
+// Contact.jsx - Contact & Inquiry Section
+// Features inquiry form with budget selection and direct API submission
+// ===================================
+
 import { useRef, useState } from 'react';
 import { motion, useInView } from 'framer-motion';
 import { HiArrowRight } from 'react-icons/hi2';
 import axios from 'axios';
 
-const budgetOptions = [
+// -- Budget Selection Options --
+const budgetList = [
   'Less $5K',
   '$5K - $10K',
   '$10K - $25K',
@@ -13,9 +19,10 @@ const budgetOptions = [
 
 export default function Contact() {
   const sectionRef = useRef(null);
-  const isInView = useInView(sectionRef, { once: true, margin: '-80px' });
+  const isVisible = useInView(sectionRef, { once: true, margin: '-80px' });
 
-  const [form, setForm] = useState({
+  // -- Form State --
+  const [formData, setFormData] = useState({
     name: '',
     email: '',
     phone: '',
@@ -23,65 +30,70 @@ export default function Contact() {
     message: '',
   });
 
-  const [errors, setErrors] = useState({});
-  const [status, setStatus] = useState('idle');
-  const [errorMsg, setErrorMsg] = useState('');
+  const [formErrors, setFormErrors] = useState({});
+  const [submitStatus, setSubmitStatus] = useState('idle'); // 'idle' | 'loading' | 'success' | 'error'
+  const [errorMessage, setErrorMessage] = useState('');
 
-  const validate = () => {
-    const newErrors = {};
-    if (!form.name.trim()) newErrors.name = 'Full name is required';
-    if (!form.email.trim()) {
-      newErrors.email = 'Email is required';
-    } else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(form.email)) {
-      newErrors.email = 'Enter a valid email';
+  // -- Simple Form Validation --
+  const validateForm = () => {
+    const errors = {};
+    if (!formData.name.trim()) errors.name = 'Full name is required';
+    if (!formData.email.trim()) {
+      errors.email = 'Email is required';
+    } else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(formData.email)) {
+      errors.email = 'Enter a valid email';
     }
-    if (!form.phone.trim()) newErrors.phone = 'Phone number is required';
-    if (!form.message.trim()) newErrors.message = 'Please tell us about your project';
-    setErrors(newErrors);
-    return Object.keys(newErrors).length === 0;
+    if (!formData.phone.trim()) errors.phone = 'Phone number is required';
+    if (!formData.message.trim()) errors.message = 'Please tell us about your project';
+    setFormErrors(errors);
+    return Object.keys(errors).length === 0;
   };
 
-  const handleChange = (e) => {
+  // -- Input Change Handler --
+  const handleInputChange = (e) => {
     const { name, value } = e.target;
-    setForm((prev) => ({ ...prev, [name]: value }));
-    if (errors[name]) {
-      setErrors((prev) => {
-        const copy = { ...prev };
-        delete copy[name];
-        return copy;
+    setFormData((prev) => ({ ...prev, [name]: value }));
+    // Clear error message on typing
+    if (formErrors[name]) {
+      setFormErrors((prev) => {
+        const updated = { ...prev };
+        delete updated[name];
+        return updated;
       });
     }
   };
 
+  // -- Form Submit to Backend API --
   const handleSubmit = async (e) => {
     e.preventDefault();
-    if (!validate()) return;
+    if (!validateForm()) return;
 
-    setStatus('loading');
-    setErrorMsg('');
+    setSubmitStatus('loading');
+    setErrorMessage('');
 
     try {
       await axios.post('/api/contact', {
-        name: form.name,
-        email: form.email,
-        phone: form.phone,
-        subject: `Website Inquiry (${form.budget})`,
-        message: form.message,
+        name: formData.name,
+        email: formData.email,
+        phone: formData.phone,
+        subject: `Website Inquiry (${formData.budget})`,
+        message: formData.message,
       });
 
-      setStatus('success');
-      setForm({
+      setSubmitStatus('success');
+      // Reset form after successful submission
+      setFormData({
         name: '',
         email: '',
         phone: '',
         budget: '$10K - $25K',
         message: '',
       });
-      setTimeout(() => setStatus('idle'), 5000);
+      setTimeout(() => setSubmitStatus('idle'), 5000);
     } catch (err) {
-      setStatus('error');
-      setErrorMsg(err.response?.data?.message || 'Something went wrong. Please try again later.');
-      setTimeout(() => setStatus('idle'), 5000);
+      setSubmitStatus('error');
+      setErrorMessage(err.response?.data?.message || 'Something went wrong. Please try again later.');
+      setTimeout(() => setSubmitStatus('idle'), 5000);
     }
   };
 
@@ -91,9 +103,10 @@ export default function Contact() {
         
         <div className="grid lg:grid-cols-12 gap-8 sm:gap-12 lg:gap-16 items-start">
           
+          {/* -- Left Column: Contact Information Cards -- */}
           <motion.div
             initial={{ opacity: 0, y: 20 }}
-            animate={isInView ? { opacity: 1, y: 0 } : {}}
+            animate={isVisible ? { opacity: 1, y: 0 } : {}}
             transition={{ duration: 0.6 }}
             className="lg:col-span-5 lg:sticky lg:top-28"
           >
@@ -109,6 +122,7 @@ export default function Contact() {
             </p>
 
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-3.5 sm:gap-4">
+              {/* Sales Email Card */}
               <div className="bg-[#f0f2f5] p-4 sm:p-5 rounded-[20px] flex flex-col justify-between border border-gray-100 min-h-[120px] sm:min-h-[130px]">
                 <div className="flex items-center justify-between mb-2">
                   <div className="w-7 h-7 sm:w-8 sm:h-8 rounded-full bg-white flex items-center justify-center text-[#121212] shadow-xs">
@@ -134,6 +148,7 @@ export default function Contact() {
                 </div>
               </div>
 
+              {/* Direct Phone Call Card */}
               <div className="bg-[#f0f2f5] p-4 sm:p-5 rounded-[20px] flex flex-col justify-between border border-gray-100 min-h-[120px] sm:min-h-[130px]">
                 <div className="flex items-center justify-between mb-2">
                   <div className="w-7 h-7 sm:w-8 sm:h-8 rounded-full bg-white flex items-center justify-center text-[#121212] shadow-xs">
@@ -161,9 +176,10 @@ export default function Contact() {
             </div>
           </motion.div>
 
+          {/* -- Right Column: Dark Inquiry Form -- */}
           <motion.div
             initial={{ opacity: 0, y: 30 }}
-            animate={isInView ? { opacity: 1, y: 0 } : {}}
+            animate={isVisible ? { opacity: 1, y: 0 } : {}}
             transition={{ duration: 0.6, delay: 0.15 }}
             className="lg:col-span-7 bg-[#121212] text-white p-6 sm:p-8 md:p-10 rounded-[24px] sm:rounded-[32px] shadow-2xl"
           >
@@ -172,91 +188,97 @@ export default function Contact() {
             </h3>
 
             <form onSubmit={handleSubmit} className="space-y-4 sm:space-y-5">
+              
+              {/* Full Name Input */}
               <div>
                 <input
                   type="text"
                   name="name"
                   placeholder="Full name *"
-                  value={form.name}
-                  onChange={handleChange}
-                  disabled={status === 'loading'}
+                  value={formData.name}
+                  onChange={handleInputChange}
+                  disabled={submitStatus === 'loading'}
                   className="w-full bg-[#1c1c1c] border border-neutral-800 rounded-xl px-4 py-3 sm:px-5 sm:py-3.5 text-xs sm:text-sm text-white placeholder:text-neutral-500 focus:outline-none focus:border-[#ed1e3a] transition-all"
                 />
-                {errors.name && <p className="text-xs text-[#ed1e3a] mt-1">{errors.name}</p>}
+                {formErrors.name && <p className="text-xs text-[#ed1e3a] mt-1">{formErrors.name}</p>}
               </div>
 
+              {/* Email & Phone Inputs */}
               <div className="grid sm:grid-cols-2 gap-3 sm:gap-4">
                 <div>
                   <input
                     type="email"
                     name="email"
                     placeholder="Your email *"
-                    value={form.email}
-                    onChange={handleChange}
-                    disabled={status === 'loading'}
+                    value={formData.email}
+                    onChange={handleInputChange}
+                    disabled={submitStatus === 'loading'}
                     className="w-full bg-[#1c1c1c] border border-neutral-800 rounded-xl px-4 py-3 sm:px-5 sm:py-3.5 text-xs sm:text-sm text-white placeholder:text-neutral-500 focus:outline-none focus:border-[#ed1e3a] transition-all"
                   />
-                  {errors.email && <p className="text-xs text-[#ed1e3a] mt-1">{errors.email}</p>}
+                  {formErrors.email && <p className="text-xs text-[#ed1e3a] mt-1">{formErrors.email}</p>}
                 </div>
                 <div>
                   <input
                     type="tel"
                     name="phone"
                     placeholder="Phone number *"
-                    value={form.phone}
-                    onChange={handleChange}
-                    disabled={status === 'loading'}
+                    value={formData.phone}
+                    onChange={handleInputChange}
+                    disabled={submitStatus === 'loading'}
                     className="w-full bg-[#1c1c1c] border border-neutral-800 rounded-xl px-4 py-3 sm:px-5 sm:py-3.5 text-xs sm:text-sm text-white placeholder:text-neutral-500 focus:outline-none focus:border-[#ed1e3a] transition-all"
                   />
-                  {errors.phone && <p className="text-xs text-[#ed1e3a] mt-1">{errors.phone}</p>}
+                  {formErrors.phone && <p className="text-xs text-[#ed1e3a] mt-1">{formErrors.phone}</p>}
                 </div>
               </div>
 
+              {/* Budget Option Pills */}
               <div>
                 <label className="block text-[11px] sm:text-xs font-bold uppercase tracking-wider text-neutral-400 mb-2 sm:mb-3">
                   Estimated Budget *
                 </label>
                 <div className="flex flex-wrap gap-2 sm:gap-2.5">
-                  {budgetOptions.map((opt) => {
-                    const isSelected = form.budget === opt;
+                  {budgetList.map((option) => {
+                    const isSelected = formData.budget === option;
                     return (
                       <button
                         type="button"
-                        key={opt}
-                        onClick={() => setForm((prev) => ({ ...prev, budget: opt }))}
+                        key={option}
+                        onClick={() => setFormData((prev) => ({ ...prev, budget: option }))}
                         className={`px-3 py-1.5 sm:px-4 sm:py-2 rounded-xl text-[11px] sm:text-xs font-bold transition-all duration-200 cursor-pointer ${
                           isSelected
                             ? 'bg-[#ed1e3a] text-white shadow-xs'
                             : 'bg-[#1c1c1c] text-neutral-400 border border-neutral-800 hover:border-neutral-600 hover:text-white'
                         }`}
                       >
-                        {opt}
+                        {option}
                       </button>
                     );
                   })}
                 </div>
               </div>
 
+              {/* Project Message Textarea */}
               <div>
                 <textarea
                   name="message"
                   rows="4"
                   placeholder="Tell us about your project..."
-                  value={form.message}
-                  onChange={handleChange}
-                  disabled={status === 'loading'}
+                  value={formData.message}
+                  onChange={handleInputChange}
+                  disabled={submitStatus === 'loading'}
                   className="w-full bg-[#1c1c1c] border border-neutral-800 rounded-xl px-4 py-3 sm:px-5 sm:py-4 text-xs sm:text-sm text-white placeholder:text-neutral-500 focus:outline-none focus:border-[#ed1e3a] transition-all resize-none"
                 />
-                {errors.message && <p className="text-xs text-[#ed1e3a] mt-1">{errors.message}</p>}
+                {formErrors.message && <p className="text-xs text-[#ed1e3a] mt-1">{formErrors.message}</p>}
               </div>
 
+              {/* Submit Button */}
               <div className="pt-1 sm:pt-2">
                 <button
                   type="submit"
-                  disabled={status === 'loading'}
+                  disabled={submitStatus === 'loading'}
                   className="w-full sm:w-auto inline-flex items-center justify-center gap-3 px-8 sm:px-10 py-3.5 sm:py-4 text-xs sm:text-sm font-bold bg-white text-[#121212] rounded-full hover:bg-neutral-200 transition-all duration-300 shadow-lg group cursor-pointer"
                 >
-                  {status === 'loading' ? (
+                  {submitStatus === 'loading' ? (
                     'Sending...'
                   ) : (
                     <>
@@ -269,14 +291,15 @@ export default function Contact() {
                 </button>
               </div>
 
-              {status === 'success' && (
-                <div className="p-3.5 sm:p-4 rounded-xl bg-green-500/10 border border-green-500/20 text-green-400 text-xs sm:text-sm">
+              {/* Feedback Status Messages */}
+              {submitStatus === 'success' && (
+                <div className="p-3.5 sm:p-4 rounded-xl bg-green-500/10 border border-green-500/20 text-green-400 text-xs sm:text-sm font-medium">
                   ✓ Response submitted successfully! Our team will contact you within 24 hours.
                 </div>
               )}
-              {status === 'error' && (
-                <div className="p-3.5 sm:p-4 rounded-xl bg-red-500/10 border border-red-500/20 text-red-400 text-xs sm:text-sm">
-                  {errorMsg}
+              {submitStatus === 'error' && (
+                <div className="p-3.5 sm:p-4 rounded-xl bg-red-500/10 border border-red-500/20 text-red-400 text-xs sm:text-sm font-medium">
+                  {errorMessage}
                 </div>
               )}
             </form>

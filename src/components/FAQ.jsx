@@ -1,6 +1,12 @@
+// ===================================
+// FAQ.jsx - Frequently Asked Questions & Client Logos
+// Includes continuous scrolling brand marquee and accordion FAQ
+// ===================================
+
 import { useState, useRef } from 'react';
 import { motion, AnimatePresence, useInView } from 'framer-motion';
 
+// -- Client Logos for Marquee Banner --
 const clientLogos = [
   { name: 'GMS', src: '/assets/images/slides-logo1.svg', h: 'h-7 sm:h-9 md:h-10' },
   { name: 'GSK', src: '/assets/images/slides-logo2.svg', h: 'h-6 sm:h-7 md:h-8' },
@@ -10,86 +16,78 @@ const clientLogos = [
   { name: 'ADCP', src: '/assets/images/slides-logo6.svg', h: 'h-8 sm:h-10 md:h-12' },
 ];
 
-const faqs = [
+// -- Questions & Answers Data --
+const faqItems = [
   {
-    q: 'What is our approach to logo design?',
-    a: 'Our process begins with brand discovery and strategy, ensuring every logo aligns with your business goals and audience.',
+    question: 'What is our approach to logo design?',
+    answer: 'Our process begins with brand discovery and strategy, ensuring every logo aligns with your business goals and audience.',
   },
   {
-    q: 'What kind of design tasks can I request?',
-    a: 'You can request custom logo designs, brand visual identities, modern websites, UI/UX design, app interfaces, and comprehensive digital brand systems.',
+    question: 'What kind of design tasks can I request?',
+    answer: 'You can request custom logo designs, brand visual identities, modern websites, UI/UX design, app interfaces, and comprehensive digital brand systems.',
   },
   {
-    q: 'Why do our logos build trust with customers?',
-    a: 'A cohesive, professional, and strategically engineered visual identity instantly establishes credibility, enhances customer recall, and positions your brand with distinct market authority.',
+    question: 'Why do our logos build trust with customers?',
+    answer: 'A cohesive, professional, and strategically engineered visual identity instantly establishes credibility, enhances customer recall, and positions your brand with distinct market authority.',
   },
   {
-    q: 'How is long-term brand growth considered in our designs?',
-    a: 'We design with scalability in mind—ensuring visual assets translate seamlessly across future product lines, web apps, global campaigns, and changing digital platforms.',
+    question: 'How is long-term brand growth considered in our designs?',
+    answer: 'We design with scalability in mind—ensuring visual assets translate seamlessly across future product lines, web apps, global campaigns, and changing digital platforms.',
   },
   {
-    q: 'What role do brand values play in our logo design?',
-    a: 'Your brand values dictate our color harmony, typography choices, and design architecture so your identity authentically resonates with your target demographic.',
+    question: 'What role do brand values play in our logo design?',
+    answer: 'Your brand values dictate our color harmony, typography choices, and design architecture so your identity authentically resonates with your target demographic.',
   },
   {
-    q: 'What value does our logo design bring to your business?',
-    a: 'We deliver measurable business value through elevated perceived brand prestige, higher consumer trust, and clear competitive differentiation in crowded markets.',
+    question: 'What value does our logo design bring to your business?',
+    answer: 'We deliver measurable business value through elevated perceived brand prestige, higher consumer trust, and clear competitive differentiation in crowded markets.',
   },
 ];
 
 export default function FAQ() {
-  const [openIdx, setOpenIdx] = useState(0);
+  // Track currently expanded FAQ item (defaults to first item open)
+  const [activeFaqIndex, setActiveFaqIndex] = useState(0);
   const sectionRef = useRef(null);
-  const isInView = useInView(sectionRef, { once: true, margin: '-80px' });
+  const isVisible = useInView(sectionRef, { once: true, margin: '-80px' });
+
+  // Toggle FAQ accordion item open/close
+  const toggleFaq = (index) => {
+    setActiveFaqIndex(activeFaqIndex === index ? -1 : index);
+  };
 
   return (
     <section id="faqs" className="bg-white overflow-hidden" ref={sectionRef}>
+      
+      {/* ===== CLIENT LOGOS INFINITE SCROLL BANNER ===== */}
       <div className="pt-10 sm:pt-16 md:pt-20 pb-8 sm:pb-14 overflow-hidden w-full relative flex select-none border-b border-gray-100">
-        <div className="flex items-center gap-[50px] sm:gap-[80px] md:gap-[110px] shrink-0 pr-[50px] sm:pr-[80px] md:pr-[110px] animate-infinite-scroll">
-          {clientLogos.map((logo, idx) => (
-            <div key={`l1-${idx}`} className="flex items-center justify-center shrink-0">
-              <img
-                src={logo.src}
-                alt={logo.name}
-                loading="lazy"
-                className={`${logo.h} w-auto object-contain max-w-[130px]`}
-              />
-            </div>
-          ))}
-        </div>
-
-        <div className="flex items-center gap-[50px] sm:gap-[80px] md:gap-[110px] shrink-0 pr-[50px] sm:pr-[80px] md:pr-[110px] animate-infinite-scroll" aria-hidden="true">
-          {clientLogos.map((logo, idx) => (
-            <div key={`l2-${idx}`} className="flex items-center justify-center shrink-0">
-              <img
-                src={logo.src}
-                alt={logo.name}
-                loading="lazy"
-                className={`${logo.h} w-auto object-contain max-w-[130px]`}
-              />
-            </div>
-          ))}
-        </div>
-
-        <div className="flex items-center gap-[50px] sm:gap-[80px] md:gap-[110px] shrink-0 pr-[50px] sm:pr-[80px] md:pr-[110px] animate-infinite-scroll" aria-hidden="true">
-          {clientLogos.map((logo, idx) => (
-            <div key={`l3-${idx}`} className="flex items-center justify-center shrink-0">
-              <img
-                src={logo.src}
-                alt={logo.name}
-                loading="lazy"
-                className={`${logo.h} w-auto object-contain max-w-[130px]`}
-              />
-            </div>
-          ))}
-        </div>
+        {[1, 2, 3].map((trackIndex) => (
+          <div
+            key={trackIndex}
+            className="flex items-center gap-[50px] sm:gap-[80px] md:gap-[110px] shrink-0 pr-[50px] sm:pr-[80px] md:pr-[110px] animate-infinite-scroll"
+            aria-hidden={trackIndex > 1 ? 'true' : 'false'}
+          >
+            {clientLogos.map((logo, logoIndex) => (
+              <div key={`track-${trackIndex}-logo-${logoIndex}`} className="flex items-center justify-center shrink-0">
+                <img
+                  src={logo.src}
+                  alt={logo.name}
+                  loading="lazy"
+                  className={`${logo.h} w-auto object-contain max-w-[130px]`}
+                />
+              </div>
+            ))}
+          </div>
+        ))}
       </div>
 
+      {/* ===== MAIN FAQS CONTENT ===== */}
       <div className="mx-auto max-w-[1320px] px-4 sm:px-6 md:px-10 py-14 sm:py-20 md:py-24">
         <div className="grid lg:grid-cols-12 gap-8 sm:gap-12 items-start">
+          
+          {/* Left Sticky Header */}
           <motion.div
             initial={{ opacity: 0, y: 20 }}
-            animate={isInView ? { opacity: 1, y: 0 } : {}}
+            animate={isVisible ? { opacity: 1, y: 0 } : {}}
             transition={{ duration: 0.6 }}
             className="lg:col-span-5 lg:sticky lg:top-28"
           >
@@ -106,25 +104,27 @@ export default function FAQ() {
             </p>
           </motion.div>
 
+          {/* Right Accordion List */}
           <div className="lg:col-span-7 space-y-3 sm:space-y-4">
-            {faqs.map((faq, i) => {
-              const isOpen = openIdx === i;
+            {faqItems.map((faq, index) => {
+              const isOpen = activeFaqIndex === index;
               return (
                 <motion.div
-                  key={i}
+                  key={index}
                   initial={{ opacity: 0, y: 16 }}
-                  animate={isInView ? { opacity: 1, y: 0 } : {}}
-                  transition={{ duration: 0.4, delay: 0.05 + i * 0.05 }}
-                  onClick={() => setOpenIdx(isOpen ? -1 : i)}
+                  animate={isVisible ? { opacity: 1, y: 0 } : {}}
+                  transition={{ duration: 0.4, delay: 0.05 + index * 0.05 }}
+                  onClick={() => toggleFaq(index)}
                   className={`p-4 sm:p-6 rounded-[18px] sm:rounded-[22px] cursor-pointer transition-all duration-300 ${
                     isOpen
                       ? 'bg-[#f0f2f5] shadow-xs'
                       : 'bg-[#f8f9fa] hover:bg-[#f0f2f5]'
                   }`}
                 >
+                  {/* Question row with Plus/Minus indicator */}
                   <div className="flex items-center justify-between gap-3 sm:gap-4">
                     <h3 className="text-base sm:text-lg md:text-[19px] font-bold text-[#121212] tracking-tight leading-snug">
-                      {faq.q}
+                      {faq.question}
                     </h3>
                     <div className={`w-7 h-7 sm:w-8 sm:h-8 rounded-full flex items-center justify-center shrink-0 transition-all duration-300 ${
                       isOpen ? 'bg-[#ed1e3a] text-white' : 'bg-white text-[#121212]'
@@ -135,6 +135,7 @@ export default function FAQ() {
                     </div>
                   </div>
 
+                  {/* Expandable Answer */}
                   <AnimatePresence>
                     {isOpen && (
                       <motion.div
@@ -145,7 +146,7 @@ export default function FAQ() {
                         className="overflow-hidden"
                       >
                         <p className="pt-3 sm:pt-4 text-xs sm:text-sm md:text-[15px] text-[#4f4f4f] leading-relaxed border-t border-gray-200/60 mt-3 sm:mt-4">
-                          {faq.a}
+                          {faq.answer}
                         </p>
                       </motion.div>
                     )}
@@ -154,6 +155,7 @@ export default function FAQ() {
               );
             })}
           </div>
+
         </div>
       </div>
     </section>

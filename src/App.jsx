@@ -1,3 +1,8 @@
+// ===================================
+// App.jsx - Main Application Layout
+// All sections are imported and rendered here
+// ===================================
+
 import Navbar from './components/Navbar';
 import Hero from './components/Hero';
 import Services from './components/Services';
@@ -11,7 +16,10 @@ import Footer from './components/Footer';
 function App() {
   return (
     <>
+      {/* Navigation Bar - fixed at top */}
       <Navbar />
+
+      {/* Main Page Content */}
       <main>
         <Hero />
         <Services />
@@ -21,6 +29,8 @@ function App() {
         <FAQ />
         <Contact />
       </main>
+
+      {/* Footer + WhatsApp Button */}
       <Footer />
     </>
   );
