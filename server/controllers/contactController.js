@@ -22,7 +22,7 @@ exports.createContact = async (req, res) => {
       });
       await contact.save();
     } catch (dbErr) {
-      console.warn('Database save warning (continuing with email notification):', dbErr.message);
+      console.error('Database save error:', dbErr.message);
     }
 
     sendContactEmail({
@@ -32,7 +32,7 @@ exports.createContact = async (req, res) => {
       subject: subject.trim(),
       message: message.trim(),
     }).catch((mailErr) => {
-      console.error('Email alert error:', mailErr.message);
+      console.error('Email send error:', mailErr.message);
     });
 
     return res.status(201).json({

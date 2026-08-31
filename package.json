@@ -1,7 +1,9 @@
 {
   "name": "manxel",
   "private": true,
-  "version": "0.0.0",
+  "version": "1.0.0",
+  "description": "Manxel agency landing page",
+  "author": "Adeel Khurram",
   "type": "module",
   "scripts": {
     "dev": "vite",

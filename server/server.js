@@ -25,7 +25,7 @@ mongoose
     console.log('MongoDB connected successfully');
   })
   .catch((err) => {
-    console.warn('MongoDB connection note: Database not running locally, continuing with email notifications:', err.message);
+    console.error('MongoDB connection error:', err.message);
   });
 
 app.listen(PORT, () => {
