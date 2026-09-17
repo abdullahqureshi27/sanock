@@ -1,4 +1,4 @@
 User-agent: *
 Allow: /
 
-Sitemap: https://manxel.com/sitemap.xml
+Sitemap: https://sanock.com/sitemap.xml
